@@ -1,0 +1,568 @@
+﻿Line Chineses,Line En,Station Name,Station Name EN,Num,District,Status,Opening,Start Time,End Time,latitude,longitude
+1号线,Line 1,罗湖,Luohu,1,Luohu,Operation,2004,06:00,23:00,114.119,22.532
+1号线,Line 1,国贸,Guomao,2,Luohu,Operation,2004,06:00,23:00,114.119,22.54
+1号线,Line 1,老街,Laojie,3,Luohu,Operation,2004,06:00,23:00,114.116,22.544
+1号线,Line 1,大剧院,Grand Theater,4,Luohu,Operation,2004,06:00,23:00,114.108,22.542
+1号线,Line 1,科学馆,Science Museum,5,Futian,Operation,2004,06:00,23:00,114.09,22.54
+1号线,Line 1,华强路,Huaqiang Road,6,Futian,Operation,2004,06:00,23:00,114.085,22.54
+1号线,Line 1,岗厦,Gangxia,7,Futian,Operation,2004,06:00,23:00,114.068,22.535
+1号线,Line 1,会展中心,Convention & Exhibition Center,8,Futian,Operation,2004,06:00,23:00,114.061,22.535
+1号线,Line 1,购物公园,Shopping Park,9,Futian,Operation,2004,06:00,23:00,114.053,22.534
+1号线,Line 1,香蜜湖,Xiangmihu,10,Futian,Operation,2004,06:00,23:00,114.039,22.539
+1号线,Line 1,车公庙,Chegongmiao,11,Futian,Operation,2004,06:00,23:00,114.029,22.536
+1号线,Line 1,竹子林,Zhuzilin,12,Futian,Operation,2004,06:00,23:00,114.014,22.533
+1号线,Line 1,侨城东,Qiaocheng East,13,Futian,Operation,2004,06:00,23:00,113.996,22.533
+1号线,Line 1,华侨城,Overseas Chinese Town,14,Nanshan,Operation,2004,06:00,23:00,113.985,22.533
+1号线,Line 1,世界之窗,Window of the World,15,Nanshan,Operation,2004,06:00,23:00,113.974,22.537
+1号线,Line 1,白石洲,Baishizhou,16,Nanshan,Operation,2009,06:00,23:00,113.967,22.54
+1号线,Line 1,高新园,High-Tech Park,17,Nanshan,Operation,2009,06:00,23:00,113.954,22.54
+1号线,Line 1,深大,Shenzhen University,18,Nanshan,Operation,2009,06:00,23:00,113.944,22.539
+1号线,Line 1,桃园,Taoyuan,19,Nanshan,Operation,2011,06:00,23:00,113.925,22.532
+1号线,Line 1,大新,Daxin,20,Nanshan,Operation,2011,06:00,23:00,113.915,22.532
+1号线,Line 1,鲤鱼门,Liyumen,21,Nanshan,Operation,2011,06:00,23:00,113.903,22.532
+1号线,Line 1,前海湾,Qianhai Bay,22,Nanshan,Operation,2011,06:00,23:00,113.898,22.537
+1号线,Line 1,新安,Xin'an,23,Bao'an,Operation,2011,06:00,23:00,113.895,22.548
+1号线,Line 1,宝安中心,Bao'an Center,24,Bao'an,Operation,2011,06:00,23:00,113.887,22.555
+1号线,Line 1,宝体,Bao'an Stadium,25,Bao'an,Operation,2011,06:00,23:00,113.881,22.561
+1号线,Line 1,坪洲,Pingzhou,26,Bao'an,Operation,2011,06:00,23:00,113.871,22.569
+1号线,Line 1,西乡,Xixiang,27,Bao'an,Operation,2011,06:00,23:00,113.863,22.575
+1号线,Line 1,固戍,Gushu,28,Bao'an,Operation,2011,06:00,23:00,113.847,22.601
+1号线,Line 1,后瑞,Hourui,29,Bao'an,Operation,2011,06:00,23:00,113.836,22.629
+1号线,Line 1,机场东,Airport East,30,Bao'an,Operation,2011,06:00,23:00,113.823,22.647
+2号线,Line 2,赤湾,Chiwan,1,Nanshan,Operation,2010,06:00,23:00,113.898,22.479
+2号线,Line 2,蛇口港,Shekou Port,2,Nanshan,Operation,2010,06:00,23:00,113.912,22.477
+2号线,Line 2,海上世界,Sea World,3,Nanshan,Operation,2010,06:00,23:00,113.915,22.485
+2号线,Line 2,水湾,Shuiwan,4,Nanshan,Operation,2010,06:00,23:00,113.92,22.488
+2号线,Line 2,东角头,Dongjiao Tou,5,Nanshan,Operation,2010,06:00,23:00,113.931,22.486
+2号线,Line 2,湾厦,Wanxia,6,Nanshan,Operation,2010,06:00,23:00,113.939,22.493
+2号线,Line 2,海月,Haiyue,7,Nanshan,Operation,2010,06:00,23:00,113.938,22.5
+2号线,Line 2,登良,Dengliang,8,Nanshan,Operation,2010,06:00,23:00,113.938,22.509
+2号线,Line 2,后海,Houhai,9,Nanshan,Operation,2010,06:00,23:00,113.942,22.519
+2号线,Line 2,科苑,Keyuan,10,Nanshan,Operation,2010,06:00,23:00,113.947,22.527
+2号线,Line 2,红树湾,Hongshuwan,11,Nanshan,Operation,2010,06:00,23:00,113.968,22.525
+2号线,Line 2,世界之窗,Window of the World,12,Nanshan,Operation,2010,06:00,23:00,113.974,22.537
+2号线,Line 2,侨城北,Qiaocheng North,13,Nanshan,Operation,2011,06:00,23:00,113.989,22.544
+2号线,Line 2,深康,Shenkang,14,Futian,Operation,2011,06:00,23:00,114,22.547
+2号线,Line 2,安托山,Antuoshan,15,Futian,Operation,2011,06:00,23:00,114.006,22.549
+2号线,Line 2,侨香,Qiaoxiang,16,Futian,Operation,2011,06:00,23:00,114.014,22.55
+2号线,Line 2,香蜜,Xiangmi,17,Futian,Operation,2011,06:00,23:00,114.024,22.553
+2号线,Line 2,香梅北,Xiangmei North,18,Futian,Operation,2011,06:00,23:00,114.034,22.554
+2号线,Line 2,景田,Jingtian,19,Futian,Operation,2011,06:00,23:00,114.043,22.554
+2号线,Line 2,莲花西,Lianhua West,20,Futian,Operation,2011,06:00,23:00,114.05,22.547
+2号线,Line 2,福田,Futian,21,Futian,Operation,2011,06:00,23:00,114.055,22.54
+2号线,Line 2,市民中心,Civic Center,22,Futian,Operation,2011,06:00,23:00,114.062,22.541
+2号线,Line 2,岗厦北,Gangxia North,23,Futian,Operation,2011,06:00,23:00,114.069,22.541
+2号线,Line 2,华强北,Huaqiang North,24,Futian,Operation,2011,06:00,23:00,114.087,22.543
+2号线,Line 2,燕南,Yannan,25,Futian,Operation,2011,06:00,23:00,114.093,22.544
+2号线,Line 2,大剧院,Grand Theater,26,Luohu,Operation,2011,06:00,23:00,114.108,22.542
+2号线,Line 2,湖贝,Hubei,27,Luohu,Operation,2011,06:00,23:00,114.125,22.544
+2号线,Line 2,黄贝岭,Huangbeiling,28,Luohu,Operation,2011,06:00,23:00,114.136,22.546
+2号线,Line 2,新秀,Xinxiu,29,Luohu,Operation,2011,06:00,23:00,114.149,22.548
+2号线,Line 2,莲塘口岸,Liantang Port,30,Luohu,Operation,2020,06:00,23:00,114.16,22.55
+2号线,Line 2,仙湖路,Xianhu Road,31,Luohu,Operation,2020,06:00,23:00,114.165,22.555
+2号线,Line 2,莲塘,Liantang,32,Luohu,Operation,2020,06:00,23:00,114.17,22.56
+3号线,Line 3,福保,Fubao,1,Futian,Operation,2020,06:00,23:00,114.05,22.515
+3号线,Line 3,益田,Yitian,2,Futian,Operation,2011,06:00,23:00,114.051,22.516
+3号线,Line 3,石厦,Shixia,3,Futian,Operation,2011,06:00,23:00,114.054,22.523
+3号线,Line 3,购物公园,Shopping Park,4,Futian,Operation,2011,06:00,23:00,114.053,22.534
+3号线,Line 3,福田,Futian,5,Futian,Operation,2011,06:00,23:00,114.055,22.54
+3号线,Line 3,少年宫,Children's Palace,6,Futian,Operation,2011,06:00,23:00,114.061,22.549
+3号线,Line 3,莲花村,Lianhuacun,7,Futian,Operation,2011,06:00,23:00,114.068,22.549
+3号线,Line 3,华新,Huaxin,8,Futian,Operation,2011,06:00,23:00,114.087,22.549
+3号线,Line 3,通新岭,Tongxinling,9,Futian,Operation,2011,06:00,23:00,114.096,22.549
+3号线,Line 3,红岭,Hongling,10,Luohu,Operation,2011,06:00,23:00,114.105,22.548
+3号线,Line 3,老街,Laojie,11,Luohu,Operation,2011,06:00,23:00,114.116,22.544
+3号线,Line 3,晒布,Shaibu,12,Luohu,Operation,2011,06:00,23:00,114.123,22.549
+3号线,Line 3,翠竹,Cuizhu,13,Luohu,Operation,2011,06:00,23:00,114.13,22.556
+3号线,Line 3,田贝,Tianbei,14,Luohu,Operation,2011,06:00,23:00,114.129,22.567
+3号线,Line 3,水贝,Shuibei,15,Luohu,Operation,2011,06:00,23:00,114.125,22.574
+3号线,Line 3,草埔,Caopu,16,Luohu,Operation,2010,06:00,23:00,114.116,22.584
+3号线,Line 3,布吉,Buji,17,Longgang,Operation,2010,06:00,23:00,114.122,22.602
+3号线,Line 3,木棉湾,Mumianwan,18,Longgang,Operation,2010,06:00,23:00,114.13,22.607
+3号线,Line 3,大芬,Dafen,19,Longgang,Operation,2010,06:00,23:00,114.138,22.614
+3号线,Line 3,丹竹头,Danzhutou,20,Longgang,Operation,2010,06:00,23:00,114.148,22.62
+3号线,Line 3,六约,Liuyue,21,Longgang,Operation,2010,06:00,23:00,114.181,22.634
+3号线,Line 3,塘坑,Tangkeng,22,Longgang,Operation,2010,06:00,23:00,114.193,22.639
+3号线,Line 3,横岗,Henggang,23,Longgang,Operation,2010,06:00,23:00,114.209,22.649
+3号线,Line 3,永湖,Yonghu,24,Longgang,Operation,2010,06:00,23:00,114.218,22.659
+3号线,Line 3,荷坳,He'ao,25,Longgang,Operation,2010,06:00,23:00,114.224,22.673
+3号线,Line 3,大运,Dayun,26,Longgang,Operation,2010,06:00,23:00,114.228,22.686
+3号线,Line 3,爱联,Ailian,27,Longgang,Operation,2010,06:00,23:00,114.232,22.695
+3号线,Line 3,吉祥,Jixiang,28,Longgang,Operation,2010,06:00,23:00,114.236,22.705
+3号线,Line 3,龙城广场,Longcheng Square,29,Longgang,Operation,2010,06:00,23:00,114.24,22.715
+3号线,Line 3,南联,Nanlian,30,Longgang,Operation,2010,06:00,23:00,114.244,22.72
+3号线,Line 3,双龙,Shuanglong,31,Longgang,Operation,2010,06:00,23:00,114.248,22.725
+3号线,Line 3,梨园,Liyuan,32,Longgang,Operation,2024,06:00,23:00,,
+3号线,Line 3,新生,Xinsheng,33,Longgang,Operation,2024,06:00,23:00,,
+3号线,Line 3,坪西,Pingxi,34,Longgang,Operation,2024,06:00,23:00,,
+3号线,Line 3,低碳城,Low Carbon City,35,Longgang,Operation,2024,06:00,23:00,,
+3号线,Line 3,白石塘,Baishitang,36,Longgang,Operation,2024,06:00,23:00,,
+3号线,Line 3,富坪,Fuping,37,Longgang,Operation,2024,06:00,23:00,,
+3号线,Line 3,坪地六联,Pingdi Liulian,38,Longgang,Operation,2024,06:00,23:00,,
+4号线,Line 4,福田口岸,Futian Port,1,Futian,Operation,2007,06:00,23:00,114.07,22.52
+4号线,Line 4,福民,Fumin,2,Futian,Operation,2004,06:00,23:00,114.065,22.53
+4号线,Line 4,会展中心,Convention & Exhibition Center,3,Futian,Operation,2004,06:00,23:00,114.061,22.535
+4号线,Line 4,市民中心,Civic Center,4,Futian,Operation,2004,06:00,23:00,114.062,22.541
+4号线,Line 4,少年宫,Children's Palace,5,Futian,Operation,2004,06:00,23:00,114.061,22.549
+4号线,Line 4,莲花北,Lianhua North,6,Futian,Operation,2011,06:00,23:00,114.05,22.56
+4号线,Line 4,上梅林,Shangmeilin,7,Futian,Operation,2011,06:00,23:00,114.05,22.57
+4号线,Line 4,民乐,Minle,8,Longhua,Operation,2011,06:00,23:00,114.04,22.58
+4号线,Line 4,白石龙,Baishilong,9,Longhua,Operation,2011,06:00,23:00,114.035,22.59
+4号线,Line 4,深圳北站,Shenzhen North Station,10,Longhua,Operation,2011,06:00,23:00,114.03,22.61
+4号线,Line 4,红山,Hongshan,11,Longhua,Operation,2011,06:00,23:00,114.025,22.62
+4号线,Line 4,上塘,Shangtang,12,Longhua,Operation,2011,06:00,23:00,114.015,22.635
+4号线,Line 4,龙胜,Longsheng,13,Longhua,Operation,2011,06:00,23:00,114.012,22.645
+4号线,Line 4,龙华,Longhua,14,Longhua,Operation,2011,06:00,23:00,114.022,22.652
+4号线,Line 4,清湖,Qinghu,15,Longhua,Operation,2011,06:00,23:00,114.036,22.664
+4号线,Line 4,清湖北,Qinghu North,16,Longhua,Operation,2020,06:00,23:00,114.042,22.67
+4号线,Line 4,竹村,Zhucun,17,Longhua,Operation,2020,06:00,23:00,114.048,22.678
+4号线,Line 4,茜坑,Qiankeng,18,Longhua,Operation,2020,06:00,23:00,114.054,22.685
+4号线,Line 4,长湖,Changhu,19,Longhua,Operation,2020,06:00,23:00,114.06,22.69
+4号线,Line 4,观澜,Guanlan,20,Longhua,Operation,2020,06:00,23:00,114.065,22.695
+4号线,Line 4,松元厦,Songyuanxia,21,Longhua,Operation,2020,06:00,23:00,114.07,22.7
+4号线,Line 4,观澜湖,Guanlan Lake,22,Longhua,Operation,2020,06:00,23:00,114.075,22.705
+4号线,Line 4,牛湖,Niuhu,23,Longhua,Operation,2020,06:00,23:00,114.08,22.71
+5号线,Line 5,赤湾,Chiwan,1,Nanshan,Operation,2019,06:00,23:00,113.898,22.479
+5号线,Line 5,荔湾,Liwan,2,Nanshan,Operation,2019,06:00,23:00,113.89,22.51
+5号线,Line 5,铁路公园,Railway Park,3,Nanshan,Operation,2019,06:00,23:00,113.895,22.515
+5号线,Line 5,妈湾,Mawan,4,Nanshan,Operation,2019,06:00,23:00,113.9,22.52
+5号线,Line 5,前湾公园,Qianwan Park,5,Nanshan,Operation,2019,06:00,23:00,113.905,22.525
+5号线,Line 5,前湾,Qianwan,6,Nanshan,Operation,2019,06:00,23:00,113.91,22.53
+5号线,Line 5,桂湾,Guiwan,7,Nanshan,Operation,2019,06:00,23:00,113.915,22.535
+5号线,Line 5,前海湾,Qianhai Bay,8,Nanshan,Operation,2011,06:00,23:00,113.898,22.537
+5号线,Line 5,临海,Linhai,9,Bao'an,Operation,2011,06:00,23:00,113.92,22.54
+5号线,Line 5,宝华,Baohua,10,Bao'an,Operation,2011,06:00,23:00,113.925,22.545
+5号线,Line 5,宝安中心,Bao'an Center,11,Bao'an,Operation,2011,06:00,23:00,113.887,22.555
+5号线,Line 5,翻身,Fanshen,12,Bao'an,Operation,2011,06:00,23:00,113.88,22.56
+5号线,Line 5,灵芝,Lingzhi,13,Bao'an,Operation,2011,06:00,23:00,113.87,22.57
+5号线,Line 5,洪浪北,Honglang North,14,Bao'an,Operation,2011,06:00,23:00,113.86,22.58
+5号线,Line 5,兴东,Xingdong,15,Bao'an,Operation,2011,06:00,23:00,113.85,22.59
+5号线,Line 5,留仙洞,Liuxiandong,16,Nanshan,Operation,2011,06:00,23:00,113.94,22.58
+5号线,Line 5,西丽,Xili,17,Nanshan,Operation,2011,06:00,23:00,113.95,22.58
+5号线,Line 5,大学城,University Town,18,Nanshan,Operation,2011,06:00,23:00,113.96,22.59
+5号线,Line 5,塘朗,Tanglang,19,Nanshan,Operation,2011,06:00,23:00,113.97,22.6
+5号线,Line 5,长岭陂,Changlingbei,20,Nanshan,Operation,2011,06:00,23:00,113.98,22.605
+5号线,Line 5,深圳北站,Shenzhen North Station,21,Longhua,Operation,2011,06:00,23:00,114.03,22.61
+5号线,Line 5,民治,Minzhi,22,Longhua,Operation,2011,06:00,23:00,114.02,22.62
+5号线,Line 5,五和,Wuhe,23,Longgang,Operation,2011,06:00,23:00,114.05,22.63
+5号线,Line 5,坂田,Bantian,24,Longgang,Operation,2011,06:00,23:00,114.06,22.64
+5号线,Line 5,杨美,Yangmei,25,Longgang,Operation,2011,06:00,23:00,114.07,22.645
+5号线,Line 5,上水径,Shangshuijing,26,Longgang,Operation,2011,06:00,23:00,114.09,22.65
+5号线,Line 5,下水径,Xiashuijing,27,Longgang,Operation,2011,06:00,23:00,114.095,22.655
+5号线,Line 5,长龙,Changlong,28,Longgang,Operation,2011,06:00,23:00,114.1,22.66
+5号线,Line 5,布吉,Buji,29,Longgang,Operation,2011,06:00,23:00,114.122,22.602
+5号线,Line 5,百鸽笼,Baigelong,30,Longgang,Operation,2011,06:00,23:00,114.11,22.665
+5号线,Line 5,布心,Buxin,31,Luohu,Operation,2011,06:00,23:00,114.13,22.58
+5号线,Line 5,太安,Tai'an,32,Luohu,Operation,2011,06:00,23:00,114.135,22.575
+5号线,Line 5,怡景,Yijing,33,Luohu,Operation,2011,06:00,23:00,114.14,22.57
+5号线,Line 5,黄贝岭,Huangbeiling,34,Luohu,Operation,2011,06:00,23:00,114.136,22.546
+5号线,Line 5,湖贝,Hubei,35,Luohu,Operation,2025,06:00,23:00,114.125,22.544
+5号线,Line 5,东门,Dongmen,36,Luohu,Operation,2025,06:00,23:00,114.12,22.545
+5号线,Line 5,大剧院,Grand Theater,37,Luohu,Operation,2025,06:00,23:00,114.108,22.542
+6号线,Line 6,科学馆,Science Museum,1,Futian,Operation,2020,06:00,23:00,114.09,22.54
+6号线,Line 6,通新岭,Tongxinling,2,Futian,Operation,2020,06:00,23:00,114.096,22.549
+6号线,Line 6,体育中心,Sports Center,3,Futian,Operation,2020,06:00,23:00,114.085,22.55
+6号线,Line 6,八卦岭,Baguazhou,4,Futian,Operation,2020,06:00,23:00,114.08,22.56
+6号线,Line 6,银湖,Yinhu,5,Luohu,Operation,2020,06:00,23:00,114.075,22.57
+6号线,Line 6,翰岭,Hanling,6,Futian,Operation,2020,06:00,23:00,114.07,22.575
+6号线,Line 6,梅林关,Meilin Pass,7,Longhua,Operation,2020,06:00,23:00,114.05,22.58
+6号线,Line 6,深圳北站,Shenzhen North Station,8,Longhua,Operation,2020,06:00,23:00,114.03,22.61
+6号线,Line 6,红山,Hongshan,9,Longhua,Operation,2020,06:00,23:00,114.025,22.62
+6号线,Line 6,上芬,Shangfen,10,Longhua,Operation,2020,06:00,23:00,114.02,22.625
+6号线,Line 6,元芬,Yuanfen,11,Longhua,Operation,2020,06:00,23:00,114.015,22.63
+6号线,Line 6,阳台山东,Yangtai Mountain East,12,Longhua,Operation,2020,06:00,23:00,114.01,22.64
+6号线,Line 6,官田,Guantian,13,Bao'an,Operation,2020,06:00,23:00,113.99,22.68
+6号线,Line 6,上屋,Shangwu,14,Bao'an,Operation,2020,06:00,23:00,113.985,22.69
+6号线,Line 6,长圳,Changzhen,15,Guangming,Operation,2020,06:00,23:00,113.98,22.72
+6号线,Line 6,凤凰城,Phoenix City,16,Guangming,Operation,2020,06:00,23:00,113.975,22.73
+6号线,Line 6,光明大街,Guangming Street,17,Guangming,Operation,2020,06:00,23:00,113.97,22.74
+6号线,Line 6,光明,Guangming,18,Guangming,Operation,2020,06:00,23:00,113.965,22.75
+6号线,Line 6,科学公园,Science Park,19,Guangming,Operation,2020,06:00,23:00,113.96,22.76
+6号线,Line 6,楼村,Loucun,20,Guangming,Operation,2020,06:00,23:00,113.955,22.77
+6号线,Line 6,红花山,Honghuashan,21,Guangming,Operation,2020,06:00,23:00,113.95,22.78
+6号线,Line 6,公明广场,Gongming Square,22,Guangming,Operation,2020,06:00,23:00,113.945,22.79
+6号线,Line 6,合水口,Heshuikou,23,Guangming,Operation,2020,06:00,23:00,113.94,22.8
+6号线,Line 6,薯田埔,Shutianpu,24,Guangming,Operation,2020,06:00,23:00,113.935,22.81
+6号线,Line 6,松岗公园,Songgang Park,25,Bao'an,Operation,2020,06:00,23:00,113.93,22.82
+6号线,Line 6,溪头,Xitou,26,Bao'an,Operation,2020,06:00,23:00,113.925,22.83
+6号线,Line 6,松岗,Songgang,27,Bao'an,Operation,2020,06:00,23:00,113.92,22.84
+6号线支线,Line 6 Branch,深理工,SZIIT,1,Guangming,Operation,2022,06:00,23:00,,
+6号线支线,Line 6 Branch,中大,SYSU,2,Guangming,Operation,2022,06:00,23:00,,
+6号线支线,Line 6 Branch,圳美,Zhenmei,3,Guangming,Operation,2022,06:00,23:00,,
+6号线支线,Line 6 Branch,光明,Guangming,4,Guangming,Operation,2022,06:00,23:00,113.965,22.75
+6号线支线,Line 6 Branch,碧眼,Biyan,5,Guangming,Operation,2025,06:00,23:00,,
+6号线支线,Line 6 Branch,虹桥公园,Hongqiao Park,6,Guangming,Operation,2025,06:00,23:00,,
+6号线支线,Line 6 Branch,光明城,Guangming City,7,Guangming,Operation,2025,06:00,23:00,,
+7号线,Line 7,深大丽湖,Shenzhen University Lihu,1,Nanshan,Operation,2024,06:12,23:00,,
+7号线,Line 7,北大,Peking University,2,Nanshan,Operation,2024,06:00,23:00,,
+7号线,Line 7,西丽湖,Xili Lake,3,Nanshan,Operation,2016,06:00,23:00,,
+7号线,Line 7,西丽,Xili,4,Nanshan,Operation,2016,06:00,23:00,113.95,22.58
+7号线,Line 7,茶光,Chaguang,5,Nanshan,Operation,2016,06:00,23:00,,
+7号线,Line 7,珠光,Zhuguang,6,Nanshan,Operation,2016,06:00,23:00,,
+7号线,Line 7,龙井,Longjing,7,Nanshan,Operation,2016,06:00,23:00,,
+7号线,Line 7,桃源村,Taoyuancun,8,Nanshan,Operation,2016,06:00,23:00,,
+7号线,Line 7,深云,Shenyun,9,Nanshan,Operation,2016,06:00,23:00,,
+7号线,Line 7,安托山,Antuoshan,10,Futian,Operation,2016,06:00,23:00,114.006,22.549
+7号线,Line 7,农林,Nonglin,11,Futian,Operation,2016,06:00,23:00,,
+7号线,Line 7,车公庙,Chegongmiao,12,Futian,Operation,2016,06:00,23:00,114.029,22.536
+7号线,Line 7,上沙,Shangsha,13,Futian,Operation,2016,06:00,23:00,,
+7号线,Line 7,沙尾,Shawei,14,Futian,Operation,2016,06:00,23:00,,
+7号线,Line 7,石厦,Shixia,15,Futian,Operation,2016,06:00,23:00,114.054,22.523
+7号线,Line 7,皇岗村,Huanggangcun,16,Futian,Operation,2016,06:00,23:00,,
+7号线,Line 7,福民,Fumin,17,Futian,Operation,2016,06:00,23:00,114.065,22.53
+7号线,Line 7,皇岗口岸,Huanggang Port,18,Futian,Operation,2016,06:00,23:00,,
+7号线,Line 7,赤尾,Chiwei,19,Futian,Operation,2016,06:00,23:00,,
+7号线,Line 7,华强南,Huaqiang South,20,Futian,Operation,2016,06:30,23:30,,
+7号线,Line 7,华强北,Huaqiang North,21,Futian,Operation,2016,06:00,23:00,114.087,22.543
+7号线,Line 7,华新,Huaxin,22,Futian,Operation,2016,06:00,23:00,114.087,22.549
+7号线,Line 7,黄木岗,Huangmugang,23,Futian,Operation,2016,06:00,23:00,114.075,22.555
+7号线,Line 7,八卦岭,Baguazhou,24,Futian,Operation,2016,06:00,23:00,114.08,22.56
+7号线,Line 7,红岭北,Hongling North,25,Luohu,Operation,2016,06:00,23:00,,
+7号线,Line 7,笋岗,Sungang,26,Luohu,Operation,2016,06:00,23:00,,
+7号线,Line 7,洪湖,Honghu,27,Luohu,Operation,2016,06:00,23:00,,
+7号线,Line 7,田贝,Tianbei,28,Luohu,Operation,2016,06:00,23:00,114.129,22.567
+7号线,Line 7,太安,Tai'an,29,Luohu,Operation,2016,06:20,23:00,114.135,22.575
+8号线,Line 8,梧桐山南,Wutong Mountain South,1,Luohu,Operation,2020,06:00,23:00,114.18,22.55
+8号线,Line 8,沙头角,Shatoujiao,2,Yantian,Operation,2020,06:00,23:00,114.23,22.55
+8号线,Line 8,海山,Haishan,3,Yantian,Operation,2020,06:00,23:00,114.24,22.555
+8号线,Line 8,盐田港西,Yantian Port West,4,Yantian,Operation,2020,06:00,23:00,114.25,22.56
+8号线,Line 8,深外高中,SZFLS Senior,5,Yantian,Operation,2020,06:00,23:00,114.255,22.565
+8号线,Line 8,盐田路,Yantian Road,6,Yantian,Operation,2020,06:00,23:00,114.26,22.57
+8号线,Line 8,鸿安围,Hong'anwei,7,Yantian,Operation,2023,06:00,23:00,114.265,22.575
+8号线,Line 8,盐田墟,Yantianxu,8,Yantian,Operation,2023,06:00,23:00,114.27,22.58
+8号线,Line 8,大梅沙,Dameisha,9,Yantian,Operation,2023,06:00,23:00,114.28,22.59
+8号线,Line 8,小梅沙,Xiaomeisha,10,Yantian,Operation,2023,06:00,23:00,114.29,22.6
+9号线,Line 9,前湾,Qianwan,1,Nanshan,Operation,2019,06:00,23:00,113.91,22.53
+9号线,Line 9,梦海,Menghai,2,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,怡海,Yihai,3,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,荔林,Lilinn,4,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,南油西,Nanyou West,5,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,南油,Nanyou,6,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,南山书城,Nanshan Book City,7,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,深大南,Shenzhen University South,8,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,粤海门,Yuehaimen,9,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,高新南,High-Tech South,10,Nanshan,Operation,2019,06:00,23:00,,
+9号线,Line 9,红树湾南,Hongshuwan South,11,Nanshan,Operation,2016,06:00,23:00,,
+9号线,Line 9,深湾,Shenwan,12,Nanshan,Operation,2016,06:00,23:00,,
+9号线,Line 9,深圳湾公园,Shenzhen Bay Park,13,Nanshan,Operation,2016,06:00,23:00,,
+9号线,Line 9,下沙,Xiasha,14,Futian,Operation,2016,06:00,23:00,,
+9号线,Line 9,车公庙,Chegongmiao,15,Futian,Operation,2016,06:00,23:00,114.029,22.536
+9号线,Line 9,香梅,Xiangmei,16,Futian,Operation,2016,06:00,23:00,,
+9号线,Line 9,景田,Jingtian,17,Futian,Operation,2016,06:00,23:00,114.043,22.554
+9号线,Line 9,梅景,Meijing,18,Futian,Operation,2016,06:00,23:00,,
+9号线,Line 9,下梅林,Xiameilin,19,Futian,Operation,2016,06:00,23:00,,
+9号线,Line 9,梅村,Meicun,20,Futian,Operation,2016,06:00,23:00,,
+9号线,Line 9,上梅林,Shangmeilin,21,Futian,Operation,2016,06:00,23:00,114.05,22.57
+9号线,Line 9,孖岭,Maling,22,Futian,Operation,2016,06:00,23:00,,
+9号线,Line 9,银湖,Yinhu,23,Luohu,Operation,2016,06:00,23:00,114.075,22.57
+9号线,Line 9,泥岗,Nigang,24,Luohu,Operation,2016,06:00,23:00,,
+9号线,Line 9,红岭北,Hongling North,25,Luohu,Operation,2016,06:00,23:00,,
+9号线,Line 9,园岭,Yuanling,26,Futian,Operation,2016,06:00,23:00,,
+9号线,Line 9,红岭,Hongling,27,Luohu,Operation,2016,06:00,23:00,114.105,22.548
+9号线,Line 9,红岭南,Hongling South,28,Luohu,Operation,2016,06:00,23:00,,
+9号线,Line 9,鹿丹村,Ludancun,29,Luohu,Operation,2016,06:00,23:00,,
+9号线,Line 9,人民南,Renmin South,30,Luohu,Operation,2016,06:00,23:00,,
+9号线,Line 9,向西村,Xiangxicun,31,Luohu,Operation,2016,06:00,23:00,,
+9号线,Line 9,文锦,Wenjin,32,Luohu,Operation,2016,06:00,23:00,,
+10号线,Line 10,双拥街,Shuangyong Street,1,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,平湖,Pinghu,2,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,禾花,Hehua,3,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,华南城,Huanan City,4,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,木古,Mugu,5,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,上李朗,Shanglilang,6,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,凉帽山,Liangmao Mountain,7,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,甘坑,Gankeng,8,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,雪象,Xuexiang,9,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,岗头,Gangtou,10,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,华为,Huawei,11,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,贝尔路,Bell Road,12,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,坂田北,Bantian North,13,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,五和,Wuhe,14,Longgang,Operation,2020,06:00,23:00,114.05,22.63
+10号线,Line 10,光雅园,Guangyayuan,15,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,南坑,Nankeng,16,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,雅宝,Yabao,17,Longgang,Operation,2020,06:00,23:00,,
+10号线,Line 10,孖岭,Maling,18,Futian,Operation,2020,06:00,23:00,,
+10号线,Line 10,冬瓜岭,Donggualing,19,Futian,Operation,2020,06:00,23:00,,
+10号线,Line 10,莲花村,Lianhuacun,20,Futian,Operation,2020,06:00,23:00,114.068,22.549
+10号线,Line 10,岗厦北,Gangxia North,21,Futian,Operation,2022,06:00,23:00,114.069,22.541
+10号线,Line 10,岗厦,Gangxia,22,Futian,Operation,2020,06:00,23:00,114.068,22.535
+10号线,Line 10,福民,Fumin,23,Futian,Operation,2020,06:00,23:00,114.065,22.53
+10号线,Line 10,福田口岸,Futian Port,24,Futian,Operation,2020,06:00,23:00,114.07,22.52
+11号线,Line 11,红岭南,Hongling South,1,Luohu,Operation,2025,06:30,23:30,,
+11号线,Line 11,华强南,Huaqiang South,2,Futian,Operation,2024,06:30,23:30,,
+11号线,Line 11,福星,Fuxing,3,Futian,Operation,2024,06:30,23:30,,
+11号线,Line 11,岗厦北,Gangxia North,4,Futian,Operation,2022,06:30,23:30,114.069,22.541
+11号线,Line 11,福田,Futian,5,Futian,Operation,2016,06:30,23:30,114.055,22.54
+11号线,Line 11,车公庙,Chegongmiao,6,Futian,Operation,2016,06:30,23:30,114.029,22.536
+11号线,Line 11,红树湾南,Hongshuwan South,7,Nanshan,Operation,2016,06:30,23:30,,
+11号线,Line 11,后海,Houhai,8,Nanshan,Operation,2016,06:30,23:30,113.942,22.519
+11号线,Line 11,南山,Nanshan,9,Nanshan,Operation,2016,06:30,23:30,,
+11号线,Line 11,前海湾,Qianhai Bay,10,Nanshan,Operation,2016,06:30,23:30,113.898,22.537
+11号线,Line 11,宝安,Bao'an,11,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,碧海湾,Bihaiwan,12,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,机场,Airport,13,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,机场北,Airport North,14,Bao'an,Operation,2016,06:30,23:30,113.81,22.64
+11号线,Line 11,福永,Fuyong,15,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,桥头,Qiaotou,16,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,塘尾,Tangwei,17,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,马安山,Ma'anshan,18,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,沙井,Shajing,19,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,后亭,Houting,20,Bao'an,Operation,2016,06:30,23:30,,
+11号线,Line 11,松岗,Songgang,21,Bao'an,Operation,2016,06:30,23:30,113.92,22.84
+11号线,Line 11,碧头,Bitou,22,Bao'an,Operation,2016,06:30,23:30,,
+12号线,Line 12,左炮台东,Zuopaotai East,1,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,太子湾,Taizi Bay,2,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,海上世界,Sea World,3,Nanshan,Operation,2022,06:00,23:00,113.915,22.485
+12号线,Line 12,花果山,Huaguoshan,4,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,四海,Sihai,5,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,南油,Nanyou,6,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,南光,Nanguang,7,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,南山,Nanshan,8,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,桃园,Taoyuan,9,Nanshan,Operation,2022,06:00,23:00,113.925,22.532
+12号线,Line 12,南头古城,Nantou Ancient City,10,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,中山公园,Zhongshan Park,11,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,同乐南,Tongle South,12,Nanshan,Operation,2022,06:00,23:00,,
+12号线,Line 12,新安公园,Xin'an Park,13,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,灵芝,Lingzhi,14,Bao'an,Operation,2022,06:00,23:00,113.87,22.57
+12号线,Line 12,上川,Shangchuan,15,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,流塘,Liutang,16,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,宝安客运站,Bao'an Bus Station,17,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,宝田一路,Baotian 1st Road,18,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,平峦山,Pingluan Mountain,19,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,西乡桃源,Xixiang Taoyuan,20,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,钟屋南,Zhongwu South,21,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,黄田,Huangtian,22,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,兴围,Xingwei,23,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,机场东,Airport East,24,Bao'an,Operation,2022,06:00,23:00,113.823,22.647
+12号线,Line 12,福围,Fuwei,25,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,怀德,Huaide,26,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,福永,Fuyong,27,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,桥头西,Qiaotou West,28,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,福海西,Fuhai West,29,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,国展,National Exhibition,30,Bao'an,Operation,2022,06:00,23:00,113.75,22.71
+12号线,Line 12,国展北,National Exhibition North,31,Bao'an,Operation,2022,06:00,23:00,113.74,22.72
+12号线,Line 12,海上田园南,Haishang Pastoral South,32,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,海上田园东,Haishang Pastoral East,33,Bao'an,Operation,2022,06:00,23:00,,
+12号线,Line 12,蚝乡,Haoxiang,34,Bao'an,Operation,2024,06:00,23:00,,
+12号线,Line 12,沙蚝,Shahao,35,Bao'an,Operation,2024,06:00,23:00,,
+12号线,Line 12,沙井古墟,Shajing Ancient Market,36,Bao'an,Operation,2024,06:00,23:00,,
+12号线,Line 12,步涌,Buchong,37,Bao'an,Operation,2024,06:00,23:00,,
+12号线,Line 12,朗下,Langxia,38,Bao'an,Operation,2024,06:00,23:00,,
+12号线,Line 12,松岗,Songgang,39,Bao'an,Operation,2024,06:00,23:00,113.92,22.84
+13号线,Line 13,深圳湾口岸,Shenzhen Bay Port,1,Nanshan,Operation,2024,06:00,23:00,113.95,22.5
+13号线,Line 13,人才公园,Talent Park,2,Nanshan,Operation,2024,06:00,23:00,113.955,22.505
+13号线,Line 13,后海,Houhai,3,Nanshan,Operation,2024,06:00,23:00,113.942,22.519
+13号线,Line 13,科苑,Keyuan,4,Nanshan,Operation,2024,06:00,23:00,113.947,22.527
+13号线,Line 13,粤海门,Yuehaimen,5,Nanshan,Operation,2024,06:00,23:00,,
+13号线,Line 13,深大,Shenzhen University,6,Nanshan,Operation,2024,06:00,23:00,113.944,22.539
+13号线,Line 13,高新中,High-Tech Center,7,Nanshan,Operation,2024,06:00,23:00,,
+14号线,Line 14,沙田,Shatian,1,Pingshan,Operation,2022,06:00,23:30,114.4,22.75
+14号线,Line 14,坑梓,Kengzi,2,Pingshan,Operation,2022,06:00,23:30,114.38,22.74
+14号线,Line 14,坪山中心,Pingshan Center,3,Pingshan,Operation,2022,06:00,23:30,114.36,22.73
+14号线,Line 14,坪山广场,Pingshan Square,4,Pingshan,Operation,2022,06:00,23:30,114.35,22.725
+14号线,Line 14,坪山围,Pingshanwei,5,Pingshan,Operation,2022,06:00,23:30,114.34,22.72
+14号线,Line 14,锦龙,Jinlong,6,Pingshan,Operation,2022,06:00,23:30,114.32,22.71
+14号线,Line 14,宝龙,Baolong,7,Longgang,Operation,2022,06:00,23:30,114.3,22.7
+14号线,Line 14,南约,Nanyue,8,Longgang,Operation,2022,06:00,23:30,114.28,22.69
+14号线,Line 14,嶂背,Zhangbei,9,Longgang,Operation,2022,06:00,23:30,114.26,22.68
+14号线,Line 14,大运,Dayun,10,Longgang,Operation,2022,06:00,23:30,114.228,22.686
+14号线,Line 14,坳背,Aobei,11,Longgang,Operation,2022,06:00,23:30,114.24,22.67
+14号线,Line 14,四联,Silian,12,Longgang,Operation,2022,06:00,23:30,114.22,22.66
+14号线,Line 14,六约北,Liuyue North,13,Longgang,Operation,2022,06:00,23:30,114.2,22.65
+14号线,Line 14,石芽岭,Shiyaling,14,Longgang,Operation,2022,06:00,23:30,114.18,22.64
+14号线,Line 14,布吉,Buji,15,Longgang,Operation,2022,06:00,23:30,114.122,22.602
+14号线,Line 14,罗湖北,Luohu North,16,Luohu,Operation,2022,06:00,23:30,114.15,22.6
+14号线,Line 14,黄木岗,Huangmugang,17,Futian,Operation,2022,06:00,23:30,114.075,22.555
+14号线,Line 14,岗厦北,Gangxia North,18,Futian,Operation,2022,06:00,23:30,114.069,22.541
+16号线,Line 16,田心,Tianxin,1,Pingshan,Operation,2022,06:00,23:00,114.45,22.78
+16号线,Line 16,技术大学,Technical University,2,Pingshan,Operation,2022,06:00,23:00,114.43,22.77
+16号线,Line 16,石井,Shijing,3,Pingshan,Operation,2022,06:00,23:00,114.41,22.76
+16号线,Line 16,燕子湖,Yanzihu,4,Pingshan,Operation,2022,06:00,23:00,114.39,22.75
+16号线,Line 16,沙壆,Shaxue,5,Pingshan,Operation,2022,06:00,23:00,114.37,22.74
+16号线,Line 16,东纵纪念馆,Dongzong Memorial,6,Pingshan,Operation,2022,06:00,23:00,114.36,22.735
+16号线,Line 16,坪环,Pinghuan,7,Pingshan,Operation,2022,06:00,23:00,114.35,22.73
+16号线,Line 16,坪山围,Pingshanwei,8,Pingshan,Operation,2022,06:00,23:00,114.34,22.72
+16号线,Line 16,六和,Liuhe,9,Pingshan,Operation,2022,06:00,23:00,114.33,22.72
+16号线,Line 16,新和,Xinhe,10,Pingshan,Operation,2022,06:00,23:00,114.32,22.715
+16号线,Line 16,坪山,Pingshan,11,Pingshan,Operation,2022,06:00,23:00,114.31,22.71
+16号线,Line 16,宝龙同乐,Baolong Tongle,12,Longgang,Operation,2022,06:00,23:00,114.29,22.7
+16号线,Line 16,龙东,Longdong,13,Longgang,Operation,2022,06:00,23:00,114.27,22.69
+16号线,Line 16,新塘围,Xintangwei,14,Longgang,Operation,2022,06:00,23:00,114.26,22.685
+16号线,Line 16,双龙,Shuanglong,15,Longgang,Operation,2022,06:00,23:00,114.248,22.725
+16号线,Line 16,龙园,Longyuan,16,Longgang,Operation,2022,06:00,23:00,114.25,22.73
+16号线,Line 16,盛平,Shengping,17,Longgang,Operation,2022,06:00,23:00,114.26,22.74
+16号线,Line 16,尚景,Shangjing,18,Longgang,Operation,2022,06:00,23:00,114.27,22.75
+16号线,Line 16,回龙埔,Huilongpu,19,Longgang,Operation,2022,06:00,23:00,114.28,22.76
+16号线,Line 16,愉园,Yuyuan,20,Longgang,Operation,2022,06:00,23:00,114.29,22.77
+16号线,Line 16,黄阁坑,Huanggekeng,21,Longgang,Operation,2022,06:00,23:00,114.3,22.78
+16号线,Line 16,龙城公园,Longcheng Park,22,Longgang,Operation,2022,06:00,23:00,114.31,22.79
+16号线,Line 16,大运中心,Dayun Center,23,Longgang,Operation,2022,06:00,23:00,114.32,22.8
+16号线,Line 16,大运,Dayun,24,Longgang,Operation,2022,06:00,23:00,114.228,22.686
+16号线,Line 16,金源,Jinyuan,25,Longgang,Operation,2025,06:00,23:00,114.34,22.82
+16号线,Line 16,吉溪,Jixi,26,Longgang,Operation,2025,06:00,23:00,114.35,22.83
+16号线,Line 16,大安,Da'an,27,Longgang,Operation,2025,06:00,23:00,114.36,22.84
+16号线,Line 16,园山,Yuanshan,28,Longgang,Operation,2025,06:00,23:00,114.37,22.85
+16号线,Line 16,福坑,Fukeng,29,Longgang,Operation,2025,06:00,23:00,114.38,22.86
+16号线,Line 16,安良,Anliang,30,Longgang,Operation,2025,06:00,23:00,114.39,22.87
+16号线,Line 16,园山西坑,Yuanshan Xikeng,31,Longgang,Operation,2025,06:00,23:00,114.4,22.88
+20号线,Line 20,机场北,Airport North,1,Bao'an,Operation,2021,06:00,23:00,113.81,22.64
+20号线,Line 20,国展南,National Exhibition South,2,Bao'an,Operation,2021,06:00,23:00,113.76,22.7
+20号线,Line 20,国展,National Exhibition,3,Bao'an,Operation,2021,06:00,23:00,113.75,22.71
+20号线,Line 20,国展北,National Exhibition North,4,Bao'an,Operation,2021,06:00,23:00,113.74,22.72
+20号线,Line 20,会展城,Convention City,5,Bao'an,Operation,2021,06:00,23:00,113.72,22.74
+13号线二期北延,Line 13 Phase 2 North Extension,红坳公园,Hong'ao Park,1,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,光明城,Guangming City,2,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,德雅路,Deya Road,3,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,凤凰城,Phoenix City,4,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,月亮路,Yueliang Road,5,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,将围,Jiangwei,6,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,新庄,Xinzhuang,7,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,公明广场,Gongming Square,8,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,上村,Shangcun,9,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,下村,Xiacun,10,Guangming,Operation,2026,,,,
+13号线二期北延,Line 13 Phase 2 North Extension,李松蓢,Lisonglang,11,Guangming,Operation,2026,,,,
+13号线,Line 13,上屋,Shangwu,16,Bao'an,Operation,2025,06:00,23:00,,
+13号线,Line 13,石岩,Shiyan,15,Bao'an,Operation,2025,06:00,23:00,,
+13号线,Line 13,罗租,Luzu,14,Bao'an,Operation,2025,06:00,23:00,,
+13号线,Line 13,应人石,Yingrenshi,13,Bao'an,Operation,2025,06:00,23:00,,
+13号线,Line 13,百旺,Baiwang,12,Nanshan,Operation,2025,06:00,23:00,,
+13号线,Line 13,留仙洞,Liuxiandong,11,Nanshan,Operation,2025,06:00,23:00,,
+13号线,Line 13,石鼓,Shigu,10,Nanshan,Operation,2025,06:00,23:00,,
+13号线,Line 13,西丽高铁站,Xili High-Speed Railway Station,9,Nanshan,Construction,2029,06:00,23:00,,
+13号线,Line 13,高新北,High-Tech North,8,Nanshan,Operation,2025,06:00,23:00,,
+13号线二期南延,Line 13 Phase 2 South Extension,东角头,Dongjiao Tou,1,Nanshan,Construction,2027,,,,
+13号线二期南延,Line 13 Phase 2 South Extension,歌剧院,Opera House,2,Nanshan,Construction,2027,,,,
+13号线二期南延,Line 13 Phase 2 South Extension,日出剧场,Sunrise Theater,3,Nanshan,Construction,2027,,,,
+13号线二期南延,Line 13 Phase 2 South Extension,深圳湾口岸,Shenzhen Bay Port,4,Nanshan,Operation,2024,,,,
+15号线,Line 15,听海,Tinghai,1,Nanshan,Construction,2028,,,,
+15号线,Line 15,前保,Qianbao,2,Nanshan,Construction,2028,,,,
+15号线,Line 15,西部物流,Western Logistics,3,Nanshan,Construction,2028,,,,
+15号线,Line 15,铁路公园,Railway Park,4,Nanshan,Construction,2028,,,,
+15号线,Line 15,月亮湾公园,Moon Bay Park,5,Nanshan,Construction,2028,,,,
+15号线,Line 15,四海,Sihai,6,Nanshan,Construction,2028,,,,
+15号线,Line 15,东滨路,Dongbin Road,7,Nanshan,Construction,2028,,,,
+15号线,Line 15,名海,Minghai,8,Nanshan,Construction,2028,,,,
+15号线,Line 15,深大南,Shenzhen University South,9,Nanshan,Construction,2028,,,,
+15号线,Line 15,深大北,Shenzhen University North,10,Nanshan,Construction,2028,,,,
+15号线,Line 15,玉泉路,Yuquan Road,11,Nanshan,Construction,2028,,,,
+15号线,Line 15,朗山路,Langshan Road,12,Nanshan,Construction,2028,,,,
+15号线,Line 15,西丽高铁站,Xili High-Speed Railway Station,13,Nanshan,Construction,2028,,,,
+15号线,Line 15,打石一路,Dashi 1st Road,14,Nanshan,Construction,2028,,,,
+15号线,Line 15,同乐关,Tongle Pass,15,Nanshan,Construction,2028,,,,
+15号线,Line 15,洪浪北,Honglang North,16,Bao'an,Construction,2028,,,,
+15号线,Line 15,宝安公园,Bao'an Park,17,Bao'an,Construction,2028,,,,
+15号线,Line 15,流塘,Liutang,18,Bao'an,Construction,2028,,,,
+15号线,Line 15,西乡公园,Xixiang Park,19,Bao'an,Construction,2028,,,,
+15号线,Line 15,坪洲,Pingzhou,20,Bao'an,Construction,2028,,,,
+15号线,Line 15,海城,Haicheng,21,Bao'an,Construction,2028,,,,
+15号线,Line 15,铲湾北,Chanwan North,22,Bao'an,Construction,2028,,,,
+15号线,Line 15,铲湾中,Chanwan Center,23,Bao'an,Construction,2028,,,,
+15号线,Line 15,铲湾南,Chanwan South,24,Bao'an,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,罗湖西,Luohu West,1,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,嘉宾,Jiabin,2,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,老街,Laojie,3,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,大塘龙,Datanglong,4,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,笋岗,Sungang,5,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,梨园,Liyuan,6,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,罗湖北,Luohu North,7,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,德兴,Dexing,8,Luohu,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,罗岗,Luogang,9,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,百鸽笼,Baigelong,10,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,求水山,Qiushuishan,11,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,南岭,Nanling,12,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,南岭中心,Nanling Center,13,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,丹竹头,Danzhutou,14,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,石芽岭,Shiyaling,15,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,下李朗,Xialilang,16,Longgang,Construction,2028,,,,
+17号线一期,Line 17 Phase 1,上李朗,Shanglilang,17,Longgang,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,南塘围,Nantangwei,1,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,人民医院,People's Hospital,2,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,汤坑,Tangkeng,3,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,锦龙,Jinlong,4,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,新围,Xinwei,5,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,宝山,Baoshan,6,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,新和,Xinhe,7,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,坪山中心,Pingshan Center,8,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,燕子岭,Yanziling,9,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,南布,Nanbu,10,Pingshan,Construction,2028,,,,
+19号线一期,Line 19 Phase 1,聚龙,Julong,11,Pingshan,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,机场北,Airport North,1,Bao'an,Operation,2021,,,,
+20号线二期,Line 20 Phase 2,航城医院,Hangcheng Hospital,2,Bao'an,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,航城,Hangcheng,3,Bao'an,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,西乡公园,Xixiang Park,4,Bao'an,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,上川一路,Shangchuan 1st Road,5,Bao'an,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,新安老城,Xin'an Old Town,6,Bao'an,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,中山公园西,Zhongshan Park West,7,Nanshan,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,南头古城,Nantou Ancient City,8,Nanshan,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,深大,Shenzhen University,9,Nanshan,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,高新园,High-Tech Park,10,Nanshan,Construction,2028,,,,
+20号线二期,Line 20 Phase 2,白石洲,Baishizhou,11,Nanshan,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,上沙,Shangsha,1,Futian,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,香蜜西,Xiangmi West,2,Futian,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,红荔西,Hongli West,3,Futian,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,香梅北,Xiangmei North,4,Futian,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,北环中学,Beihuan Middle School,5,Futian,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,凯丰,Kaifeng,6,Futian,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,民乐,Minle,7,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,横岭,Hengling,8,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,民治,Minzhi,9,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,民治北,Minzhi North,10,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,油松,Yousong,11,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,松和,Songhe,12,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,岗头北,Gangtou North,13,Longgang,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,风门坳,Fengmen'ao,14,Longgang,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,观湖,Guanhu,15,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,鹭湖,Luhu,16,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,鹭湖北,Luhu North,17,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,松元厦,Songyuanxia,18,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,桂花,Guihua,19,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,库坑,Kukeng,20,Longhua,Construction,2028,,,,
+22号线一期,Line 22 Phase 1,黎光,Liguang,21,Longhua,Construction,2028,,,,
+25号线一期,Line 25 Phase 1,石龙,Shilong,1,Bao'an,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,创意城,Creative City,2,Bao'an,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,石凹,Shi'ao,3,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,大浪,Dalang,4,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,华昌,Huachang,5,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,华富,Huafu,6,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,龙华公园,Longhua Park,7,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,龙华,Longhua,8,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,景龙,Jinglong,9,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,油福,Youfu,10,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,油松,Yousong,11,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,上油松,Shangyousong,12,Longhua,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,黄君山,Huangjun Mountain,13,Longgang,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,贝尔路,Bell Road,14,Longgang,Construction,2029,,,,
+25号线一期,Line 25 Phase 1,吉华医院,Jihua Hospital,15,Longgang,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,松坪南,Songping South,1,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,西丽高铁站,Xili High-Speed Railway Station,2,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,文光,Wenguang,3,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,西丽,Xili,4,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,丽山,Lishan,5,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,丽水,Lishui,6,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,深大丽湖,Shenzhen University Lihu,7,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,长岭陂,Changlingbei,8,Nanshan,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,北站西广场,North Station West Square,9,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,民丰路,Minfeng Road,10,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,白石龙,Baishilong,11,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,民康,Minkang,12,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,民宝,Minbao,13,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,华城,Huacheng,14,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,银泉,Yinquan,15,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,油松,Yousong,16,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,松和,Songhe,17,Longhua,Construction,2029,,,,
+27号线一期,Line 27 Phase 1,岗头西,Gangtou West,18,Longgang,Construction,2029,,,,
+29号线一期,Line 29 Phase 1,红树湾南,Hongshuwan South,1,Nanshan,Construction,2028,,,,
+29号线一期,Line 29 Phase 1,白石路,Baishi Road,2,Nanshan,Construction,2028,,,,
+29号线一期,Line 29 Phase 1,白石洲,Baishizhou,3,Nanshan,Construction,2028,,,,
+29号线一期,Line 29 Phase 1,世界之窗,Window of the World,4,Nanshan,Construction,2028,,,,
+29号线一期,Line 29 Phase 1,西丽东,Xili East,5,Nanshan,Construction,2028,,,,
+29号线一期,Line 29 Phase 1,珠光,Zhuguang,6,Nanshan,Construction,2028,,,,
+29号线一期,Line 29 Phase 1,西丽西,Xili West,7,Nanshan,Construction,2028,,,,
+29号线一期,Line 29 Phase 1,兴东,Xingdong,8,Bao'an,Construction,2028,,,,
+32号线一期,Line 32 Phase 1,溪涌,Xichong,1,Dapeng,Construction,2028,,,,
+32号线一期,Line 32 Phase 1,上洞,Shangdong,2,Dapeng,Construction,2028,,,,
+32号线一期,Line 32 Phase 1,土洋,Tuyang,3,Dapeng,Construction,2028,,,,
+32号线一期,Line 32 Phase 1,葵涌,Kuichong,4,Dapeng,Construction,2028,,,,
+32号线一期,Line 32 Phase 1,葵涌东,Kuichong East,5,Dapeng,Construction,2028,,,,
+8号线三期,Line 8 Phase 3,小梅沙,Xiaomeisha,1,Yantian,Operation,2023,,,,
+8号线三期,Line 8 Phase 3,溪涌,Xichong,2,Dapeng,Operation,2025,,,,
