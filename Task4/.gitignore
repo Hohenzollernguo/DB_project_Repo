@@ -1,0 +1,14 @@
+# Generated build output and local dependency cache
+/target/
+/.maven-cache/
+
+# Personal IDE configuration
+/.idea/
+*.iml
+
+# Real local configuration; keep the example template
+/.env
+/.env.*
+!/.env.example
+/config/db.env
+/config/*.local.properties
