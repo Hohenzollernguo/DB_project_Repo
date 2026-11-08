@@ -19,6 +19,3 @@ FROM public.station s JOIN public.district d USING (district_id)
 LEFT JOIN public.station_exit e USING (station_id)
 WHERE s.chinese_name = '梨园'
 GROUP BY s.station_id, s.chinese_name, d.name_en ORDER BY d.name_en;
-
-SELECT * FROM public.get_station_n_neighbor('Mawan', 'Line 5', 2)
-WITH ORDINALITY AS t(name, ord) ORDER BY ord;
