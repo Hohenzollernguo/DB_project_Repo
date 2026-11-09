@@ -19,7 +19,9 @@ class ArchitectureTest {
     void bootstrapAndPendingBusinessDoNotOpenConnectionsOrPretendSuccess() {
         var services = AppBootstrap.create(() -> { throw new AssertionError("Unexpected database access"); });
         assertThrows(UnsupportedOperationException.class, () -> services.stations().search(""));
-        assertThrows(UnsupportedOperationException.class, () -> services.lines().insertStops(1, 1, List.of()));
+        AppException invalidStops = assertThrows(AppException.class,
+                () -> services.lines().insertStops(1, 1, List.of()));
+        assertEquals(ErrorCode.INVALID_INPUT, invalidStops.code());
         assertThrows(UnsupportedOperationException.class, () -> services.neighbors().get("a", "b", 1));
         assertThrows(UnsupportedOperationException.class, () -> services.routes().findRoute(1, 2));
         assertThrows(UnsupportedOperationException.class, () -> services.landmarks().findRoute("a", "b"));

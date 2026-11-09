@@ -2,10 +2,18 @@ package edu.cs307.metro.cli;
 
 import edu.cs307.metro.bootstrap.AppServices;
 import edu.cs307.metro.common.AppException;
+import edu.cs307.metro.common.ErrorCode;
 import edu.cs307.metro.db.DatabaseStatus;
 import edu.cs307.metro.model.LineDraft;
+import edu.cs307.metro.model.LineStopView;
 import edu.cs307.metro.model.LineView;
+import edu.cs307.metro.model.StationView;
+import edu.cs307.metro.model.StopDraft;
 import java.io.PrintStream;
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,7 +31,7 @@ public final class CliApp {
             output.println("""
                     1. 车站管理（新增/修改/删除/查询，待实现）
                     2. 修改线路中英文名
-                    3. 站线关系（插入/移除/属性修改，待实现）
+                    3. 站线关系（插入/移除）
                     4. 前后第 n 站（待接入）
                     5. 两站路径（待实现）
                     6. 两地标路线（待实现）
@@ -41,7 +49,7 @@ public final class CliApp {
             try {
                 switch (choice) {
                     case "0" -> { return; }
-                    case "1", "3", "4", "5", "6" ->
+                    case "1", "4", "5", "6" ->
                             output.println("此功能的接口和入口已预留，业务与输入流程尚未实现。");
                     case "2" -> {
                         LineView selected = CliLineSelection.select(services.lines(), input, output, "修改");
@@ -56,6 +64,9 @@ public final class CliApp {
                         LineView result = services.lines().update(selected.lineId(), draft);
                         output.printf("修改成功：ID=%d，中文名=%s，英文名=%s%n",
                                 result.lineId(), result.chineseName(), result.englishName());
+                    }
+                    case "3" -> {
+                        if (!runLineStationMenu(input, output)) return;
                     }
                     case "7" -> output.println("计费规则与基础数据待确认，当前无法计算票价。");
                     case "8" -> {
@@ -115,6 +126,222 @@ public final class CliApp {
                 output.println("此功能尚未实现。");
             }
             output.println();
+        }
+    }
+
+    /** 返回 true 表示回到主菜单，false 表示输入结束，需要退出程序。 */
+    private boolean runLineStationMenu(Scanner input, PrintStream output) {
+        while (true) {
+            output.println("""
+                    站线关系管理
+                    1. 插入站点
+                    2. 移除站点
+                    0. 返回主菜单""");
+            output.print("请选择站线操作：");
+            if (!input.hasNextLine()) {
+                return false;
+            }
+            String choice = input.nextLine().trim();
+            switch (choice) {
+                case "0" -> { return true; }
+                case "1" -> {
+                    if (!runInsertStops(input, output)) return false;
+                }
+                case "2" -> {
+                    LineView selectedLine = CliLineSelection.select(
+                            services.lines(), input, output, "移除站点");
+                    if (selectedLine == null) continue;
+
+                    long lineId = selectedLine.lineId();
+                    List<LineStopView> stops = services.lines().getStops(lineId);
+                    if (stops.isEmpty()) {
+                        output.println("该线路暂无站点。");
+                        continue;
+                    }
+                    for (LineStopView stop : stops) {
+                        StationView station = stop.station();
+                        output.printf("站序=%d，车站 ID=%d，站名=%s / %s，行政区=%s%n",
+                                stop.position(), station.stationId(), station.key().chineseName(),
+                                station.englishName(), station.key().districtName());
+                    }
+
+                    output.print("请输入要移除的车站 ID（留空取消）：");
+                    if (!input.hasNextLine()) return false;
+                    String stationChoice = input.nextLine().trim();
+                    if (stationChoice.isEmpty()) {
+                        output.println("已取消移除。");
+                        continue;
+                    }
+                    final long stationId;
+                    try {
+                        stationId = Long.parseLong(stationChoice);
+                    } catch (NumberFormatException failure) {
+                        throw new AppException(ErrorCode.INVALID_INPUT, "请选择列表中的车站 ID。");
+                    }
+                    StationView selectedStation = stops.stream()
+                            .map(LineStopView::station)
+                            .filter(station -> station.stationId() == stationId)
+                            .findFirst()
+                            .orElseThrow(() -> new AppException(
+                                    ErrorCode.INVALID_INPUT, "请选择列表中的车站 ID。"));
+
+                    output.printf("确认从线路 ID=%d（%s）移除车站 ID=%d（%s）？输入 YES 确认，其他输入取消：",
+                            lineId, selectedLine.chineseName(), stationId,
+                            selectedStation.key().chineseName());
+                    if (!input.hasNextLine()) return false;
+                    if (!"YES".equalsIgnoreCase(input.nextLine().trim())) {
+                        output.println("已取消移除。");
+                        continue;
+                    }
+                    services.lines().removeStop(lineId, stationId);
+                    output.printf("移除成功：线路 ID=%d，车站 ID=%d%n", lineId, stationId);
+                }
+                case "" -> output.println("输入不能为空，请输入 0 到 2。");
+                default -> output.println("无效选项，请输入 0 到 2。");
+            }
+            output.println();
+        }
+    }
+
+    private boolean runInsertStops(Scanner input, PrintStream output) {
+        LineView selectedLine = CliLineSelection.select(
+                services.lines(), input, output, "插入站点");
+        if (selectedLine == null) return true;
+
+        String positionText = readLine(input, output, "请输入插入位置（从 1 开始，留空取消）：");
+        if (positionText == null) return false;
+        if (positionText.isEmpty()) {
+            output.println("已取消插入。");
+            return true;
+        }
+        int position = parsePositiveInt(positionText, "插入位置");
+        String countText = readLine(input, output, "请输入本次插入的车站数量（留空取消）：");
+        if (countText == null) return false;
+        if (countText.isEmpty()) {
+            output.println("已取消插入。");
+            return true;
+        }
+        int count = parsePositiveInt(countText, "车站数量");
+        List<StopDraft> stops = new ArrayList<>();
+        for (int index = 0; index < count; index++) {
+            output.printf("选择第 %d 个待插入车站。%n", index + 1);
+            StationView station = selectStationForInsertion(input, output);
+            if (station == null) return true;
+
+            String status = readLine(input, output, "请输入运营状态（Operation / Construction）：");
+            if (status == null) return false;
+            if (!status.equals("Operation") && !status.equals("Construction")) {
+                throw new AppException(ErrorCode.INVALID_INPUT, "运营状态必须是 Operation 或 Construction。");
+            }
+            String yearText = readLine(input, output, "请输入开通或预计开通年份：");
+            if (yearText == null) return false;
+            int openingYear = parsePositiveInt(yearText, "开通年份");
+            if (openingYear > Short.MAX_VALUE) {
+                throw new AppException(ErrorCode.INVALID_INPUT, "开通年份必须在 1 到 32767 之间。");
+            }
+
+            String startText = readLine(input, output, "请输入首班时间（HH:mm，可留空）：");
+            if (startText == null) return false;
+            LocalTime startTime = parseOptionalTime(startText);
+            String endText = readLine(input, output, "请输入末班时间（HH:mm，可留空）：");
+            if (endText == null) return false;
+            LocalTime endTime = parseOptionalTime(endText);
+            String latitudeText = readLine(input, output, "请输入 source_latitude 原值（可留空）：");
+            if (latitudeText == null) return false;
+            BigDecimal latitude = parseOptionalCoordinate(latitudeText);
+            String longitudeText = readLine(input, output, "请输入 source_longitude 原值（可留空）：");
+            if (longitudeText == null) return false;
+            BigDecimal longitude = parseOptionalCoordinate(longitudeText);
+            stops.add(new StopDraft(station.stationId(), status, openingYear,
+                    startTime, endTime, latitude, longitude));
+        }
+
+        output.printf("确认向线路 ID=%d（%s）的位置 %d 插入以下 %d 个车站？%n",
+                selectedLine.lineId(), selectedLine.chineseName(), position, count);
+        for (StopDraft stop : stops) {
+            output.printf("车站 ID=%d，状态=%s，开通年份=%d%n",
+                    stop.stationId(), stop.status(), stop.openingYear());
+        }
+        String confirmation = readLine(input, output, "输入 YES 确认，其他输入取消：");
+        if (confirmation == null) return false;
+        if (!"YES".equalsIgnoreCase(confirmation)) {
+            output.println("已取消插入。");
+            return true;
+        }
+        services.lines().insertStops(selectedLine.lineId(), position, stops);
+        output.printf("插入成功：线路 ID=%d，起始位置=%d，车站数量=%d%n",
+                selectedLine.lineId(), position, count);
+        return true;
+    }
+
+    private StationView selectStationForInsertion(Scanner input, PrintStream output) {
+        String keyword = readLine(input, output, "请输入要插入的车站查询关键词（留空取消）：");
+        if (keyword == null) return null;
+        if (keyword.isEmpty()) {
+            output.println("已取消插入。");
+            return null;
+        }
+        List<StationView> candidates = services.stations().search(keyword);
+        if (candidates.isEmpty()) {
+            output.println("未找到匹配车站，本次插入已取消。");
+            return null;
+        }
+        for (StationView station : candidates) {
+            output.printf("车站 ID=%d，站名=%s / %s，行政区=%s%n", station.stationId(),
+                    station.key().chineseName(), station.englishName(), station.key().districtName());
+        }
+        if (candidates.size() == 1) return candidates.get(0);
+
+        String choice = readLine(input, output, "请输入候选车站 ID（留空取消）：");
+        if (choice == null) return null;
+        if (choice.isEmpty()) {
+            output.println("已取消插入。");
+            return null;
+        }
+        final long stationId;
+        try {
+            stationId = Long.parseLong(choice);
+        } catch (NumberFormatException failure) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "请选择列表中的车站 ID。");
+        }
+        return candidates.stream()
+                .filter(station -> station.stationId() == stationId)
+                .findFirst()
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.INVALID_INPUT, "请选择列表中的车站 ID。"));
+    }
+
+    private static String readLine(Scanner input, PrintStream output, String prompt) {
+        output.print(prompt);
+        if (!input.hasNextLine()) return null;
+        return input.nextLine().trim();
+    }
+
+    private static int parsePositiveInt(String text, String label) {
+        try {
+            int value = Integer.parseInt(text);
+            if (value > 0) return value;
+        } catch (NumberFormatException failure) {
+            throw new AppException(ErrorCode.INVALID_INPUT, label + "必须是有效的正整数。");
+        }
+        throw new AppException(ErrorCode.INVALID_INPUT, label + "必须是有效的正整数。");
+    }
+
+    private static LocalTime parseOptionalTime(String text) {
+        if (text.isEmpty()) return null;
+        try {
+            return LocalTime.parse(text);
+        } catch (DateTimeParseException failure) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "时间格式不正确，请输入 HH:mm，例如 06:30。");
+        }
+    }
+
+    private static BigDecimal parseOptionalCoordinate(String text) {
+        if (text.isEmpty()) return null;
+        try {
+            return new BigDecimal(text);
+        } catch (NumberFormatException failure) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "源坐标必须是有效数字。");
         }
     }
 }
