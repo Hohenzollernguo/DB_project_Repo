@@ -125,7 +125,7 @@ public class ImportSqlGenerator {
                     .append(pair[1]).append(") from public.").append(pair[0]).append("), true);\n");
         }
         sql.append("set constraints all immediate;\ncommit;\n");
-        Path output = repo.resolve("Task3/import.sql");
+        Path output = repo.resolve("Task3/src/import.sql");
         Files.createDirectories(output.getParent());
         Files.writeString(output, sql, StandardCharsets.UTF_8);
         System.out.println("已生成：" + output);
