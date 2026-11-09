@@ -8,6 +8,7 @@ select count(*) as station_count from public.station;
 select count(distinct line_id) from public.metro_line;
 
 -- Q3（A）：按行政区统计运营中的车站数。
+
 select d.name_en as district, count(s.station_id) as station_count
 from public.district d
 left join public.station s on s.district_id = d.district_id
