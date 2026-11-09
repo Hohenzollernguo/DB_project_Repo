@@ -61,6 +61,26 @@ public class LineDao {
     }
 
 
+    /**
+     * 交互层先按编号查询候选，单条自动选定，多条由用户选择 ID，再传入选定记录的内部 lineId。
+     * 调用方须已开启事务，并用同一连接完成后续操作；锁持续到事务提交或回滚。
+     * 返回是否找到并锁定线路，事务由调用方管理。
+     */
+    public boolean lockById(Connection connection, long lineId) throws SQLException {
+        String sql = """
+                SELECT line_id
+                FROM public.metro_line
+                WHERE line_id = ?
+                FOR UPDATE
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, lineId);
+            try (ResultSet rows = statement.executeQuery()) {
+                return rows.next();
+            }
+        }
+    }
+
     public List<LineView> search(Connection connection, String keyword)
             throws SQLException {
         String sql = """
