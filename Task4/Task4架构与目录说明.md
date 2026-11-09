@@ -2,6 +2,12 @@
 
 日期：2026-11-02。用途：供 A、B 继续开发的共享架构基线。
 
+2026-11-09 更新了线路修改和删除的交互。用户输入线路编号，程序查询全部候选，单条自动选定，多条列出 ID 和名称供选择，再以选中记录的内部 ID 调用 Service。CLI 与 Swing 使用相同的选择规则。
+
+2026-11-07 已接通线路添加、修改和删除的 DAO、Service、CLI 与 Swing。当前入口和验收结果见 [线路添加删除验收](docs/线路添加删除验收.md)。
+
+2026-11-05 更新：线路名称修改已经接通 DAO、Service、CLI 和 Swing，详见 [线路更新实现与验证](docs/线路更新实现与验证.md)。其余占位功能保持待实现状态；原骨架验证结果是历史记录。
+
 ## 1. 依据与范围
 
 本文件区分三类内容：
@@ -14,12 +20,12 @@
 
 1. `官方描述及数据/CS307-Fall26-project1.pdf`，第 7—8 页。
 2. `开发约定/CS307_并行开发约定_JDBC.pdf`，第 7—12 页。
-3. `create_table.sql`，当前共享 DDL。
+3. `Task3/tools/create_table.sql`，共享 DDL，路径按远端 Task3 整理结果统一。
 4. A/B 已确定的分工，列于本文件第 6 节。
 
 课程没有指定上述 Java 技术栈；这是团队选择。驱动版本与团队基线一致，并已核对 [pgJDBC 官方下载页](https://jdbc.postgresql.org/download/)。
 
-本轮交付仅为架构。业务实现、完整数据库验收、最终界面与答辩演示仍需后续开发。
+线路添加、名称修改和删除已通过业务、交互与实库测试验收，开发顺序和历史状态应结合最新验收记录阅读。
 
 ## 2. 放在哪里，操作什么数据
 
@@ -32,7 +38,7 @@
 - `station`、`district`：车站资料和行政区。
 - `station_exit`、`landmark`、`exit_landmark`：出口与地标关联。
 
-DDL 继续以已有 仓库根目录的 `create_table.sql` 为来源；本目录不另建第二份表结构。旧 PDF 中的 `schema.sql` 指当前这份建表文件，团队接入时应统一文件引用。A 的正式导入应包含相同 DDL，并在显式写入 ID 后推进自增序列。
+共享 DDL 路径统一为仓库内的 `Task3/tools/create_table.sql`，该文件由远端 Task3 整理从仓库根目录移入。旧 PDF 中的 `schema.sql` 指这份建表文件，团队接入时应统一文件引用。A 的正式导入应包含相同 DDL，并在显式写入 ID 后推进自增序列。
 
 ## 3. 调用关系
 
@@ -52,9 +58,9 @@ flowchart TD
     JDBC --> PostgreSQL
 ```
 
-以修改线路为例：界面收集中英文名和 lineId → LineService 校验 → Transactions 开启事务 → LineDao 执行带占位符的 UPDATE → 检查影响行数 → 提交 → 返回 LineView。
+线路修改先由界面收集线路编号，调用 LineService.search 查询候选。单条候选自动选定，多条候选展示 ID 和中英文名供用户选择，选定后收集新中英文名，再把所选记录的 lineId 交给 LineService.update。随后 Service 校验 → Transactions 开启事务 → LineDao 执行带占位符的 UPDATE → 检查影响行数 → 提交 → 返回 LineView。
 
-目前这条业务链的接口和基础设施已建立，具体线路校验及 UPDATE 尚未实现。现有 `DatabaseDiagnostics → DatabaseInfoDao` 是可执行的只读 JDBC 示例。
+线路修改已经实现：Service 校验并规范化输入，在 Transactions.write 中调用 LineDao.updateName；UPDATE 影响 0 行时返回 NOT_FOUND，1 行时构造 LineView，事务提交后返回调用方。数据库唯一约束拒绝重名，由已有事务层回滚并转换为 DUPLICATE。无需额外查询就能由影响行数判断目标是否存在。`DatabaseDiagnostics → DatabaseInfoDao` 仍是只读 JDBC 示例。
 
 ## 4. 目录及各部分预期功能
 
@@ -93,12 +99,17 @@ Task4/
 │  │  └─ impl/                    A、B 业务实现位置
 │  ├─ dao/
 │  │  ├─ DatabaseInfoDao.java      查询当前数据库、schema、版本
+│  │  ├─ LineDao.java              添加线路并返回 ID，按 ID 更新或删除线路
 │  │  └─ package-info.java         DAO 开发规则
 │  ├─ cli/
-│  │  └─ CliApp.java               命令行菜单与后续交互接入点
+│  │  ├─ CliApp.java               命令行菜单与后续交互接入点
+│  │  └─ CliLineSelection.java     修改、删除共用的按编号查询及候选 ID 选择
 │  └─ ui/
-│     └─ DesktopApp.java           Swing 外壳，后台执行 JDBC
-├─ src/test/java/edu/cs307/metro/   基础设施自动测试
+│     ├─ DesktopApp.java           Swing 功能入口，后台执行连接诊断
+│     ├─ LineUpdatePanel.java      线路修改表单，后台调用 LineService
+│     ├─ LineCreatePanel.java      线路添加表单，后台调用 LineService
+│     └─ LineDeletePanel.java      线路删除确认表单，后台调用 LineService
+├─ src/test/java/edu/cs307/metro/   基础设施、线路更新、交互及可选 PostgreSQL 测试
 ├─ .maven-cache/                   本地依赖缓存，非共享源文件
 └─ target/                         编译、测试报告、普通 jar
 ```
@@ -111,11 +122,11 @@ Task4/
 | config/db | 从本地配置连接 PostgreSQL，每请求独立连接，事务和异常转换 | 已实现；实库连接待验证 |
 | model | 双方传递的数据结构；无 JDBC 类型或业务 SQL | 已实现 |
 | service 接口 | 固定功能名称、参数、返回值和错误约定 | 已实现 |
-| service/impl | 输入校验、业务规则、调用 DAO、确定事务范围 | 占位，待双方实现 |
-| dao | 参数化 SQL、读取 ResultSet、映射 DTO | 仅连接诊断已实现；业务 DAO 待添加 |
-| cli | 收集输入、选择候选 ID、调用服务、输出结果、返回主菜单 | 菜单已实现；业务输入流程待完成 |
-| ui | Swing 界面、调用相同 Service，异步数据库操作 | 外壳已实现；功能按钮待接入 |
-| tests | 验证基础设施；后续加入业务与真实 PostgreSQL 集成测试 | 基础测试见审阅记录 |
+| service/impl | 输入校验、业务规则、调用 DAO、确定事务范围 | 已实现线路添加、名称修改与删除 |
+| dao | 参数化 SQL、读取 ResultSet、映射 DTO | 已实现连接诊断和线路添加、修改、删除 |
+| cli | 收集输入、选择候选 ID、调用服务、输出结果、返回主菜单 | 已接通线路添加、修改与确认删除 |
+| ui | Swing 界面、调用相同 Service，异步数据库操作 | 已接入线路添加、修改和删除表单 |
+| tests | 验证基础设施、业务与真实 PostgreSQL | 已加入线路更新测试；实库测试须显式启用 |
 
 DAO 由开发者按需要增加 `StationDao`、`LineDao`、`LineStopDao`、`NeighborDao`、`RouteDao`、`LandmarkDao`。目前不提前固定内部 DAO 方法；需要冻结的是双方交互的公共 Service 与 DTO。
 
@@ -201,6 +212,8 @@ SQLSTATE 映射：23505 → DUPLICATE；23503 在删除时 → IN_USE，在写�
 
 ### 线路与站线关系
 
+- 修改和删除的用户输入为线路编号。交互层调用 search 查询，单条自动选定，多条列出 ID 和中英文名供选择，随后使用选中记录的内部 lineId 调用 update 或 delete。
+- 编号须为去除首尾空白后的正整数字符串。未找到候选时给出反馈，多候选时只接受当前列表中的 ID。CLI 留空取消选择，删除仍须输入 YES 确认。Swing 使用后台查询，修改编号后使旧候选和确认失效，重新查询后才能提交。
 - 修改线路中英文名时保留 line_id；两种名称各自唯一。
 - update 是资料全量替换；updateStop 只修改站线属性，不修改位置。
 - 有站线关系的线路不能直接删除；从线路移除站点不删除 station、出口或其他线路的关联。
@@ -209,6 +222,17 @@ SQLSTATE 映射：23505 → DUPLICATE；23503 在删除时 → IN_USE，在写�
 - 同一事务先锁 metro_line 行，再移动站序并插入/删除；多线时按 line_id 升序锁定。
 - position 必须在提交前连续为 1..N。现有延迟 UNIQUE 只保证不重复，不自动保证连续。
 - 提交阶段也可能发生唯一冲突，因此提交失败必须回滚。基础设施已有相应自动测试。
+
+### 基础 2 线路查询
+
+2026-11-09 确认以下团队开发规则，作为线路查询的实现和验收依据。
+
+- 用户输入待查询的线路编号，例如 `13` 或 `1`。`LineService.search(String keyword)` 的 `keyword` 表示该编号。
+- 按线路名称中的完整编号匹配，返回同编号的全部线路记录。同编号的分期、延伸段或支线均纳入结果。
+- 输入 `13` 应返回 `Line 13`、`Line 13 Phase 2 North Extension`、`Line 13 Phase 2 South Extension` 等编号为 13 的记录。
+- 输入 `1` 只匹配编号为 1 的 `Line 1` 对应记录。验收时应确认结果排除 `Line 10`、`Line 11`、`Line 12`、`Line 13` 等其他编号。
+- 查询条件取线路名称中的编号。结果中的 `lineId` 取匹配记录的 `metro_line.line_id`。修改、删除入口先按编号查询并选择候选，程序取得其 `lineId` 后调用写操作。
+- `List<LineView> search(String keyword)` 返回所有匹配的线路记录，无匹配时返回空列表。
 
 ### 车站管理与查询
 

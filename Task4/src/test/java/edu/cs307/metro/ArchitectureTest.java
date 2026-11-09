@@ -18,8 +18,6 @@ class ArchitectureTest {
     @Test
     void bootstrapAndPendingBusinessDoNotOpenConnectionsOrPretendSuccess() {
         var services = AppBootstrap.create(() -> { throw new AssertionError("Unexpected database access"); });
-        assertThrows(UnsupportedOperationException.class,
-                () -> services.lines().update(1, new LineDraft("测试", "Test")));
         assertThrows(UnsupportedOperationException.class, () -> services.stations().search(""));
         assertThrows(UnsupportedOperationException.class, () -> services.lines().insertStops(1, 1, List.of()));
         assertThrows(UnsupportedOperationException.class, () -> services.neighbors().get("a", "b", 1));
@@ -85,11 +83,12 @@ class ArchitectureTest {
     void defaultCliHandlesBadInputThenExitsWithoutDatabase() {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         PrintStream output = new PrintStream(buffer, true, StandardCharsets.UTF_8);
-        int code = Main.run(new String[0], new ByteArrayInputStream("bad\n2\n0\n".getBytes(StandardCharsets.UTF_8)),
+        int code = Main.run(new String[0], new ByteArrayInputStream("bad\n2\n0\n测试线路\nTest Line\n1\n0\n".getBytes(StandardCharsets.UTF_8)),
                 output, output);
         assertEquals(0, code);
         String text = buffer.toString(StandardCharsets.UTF_8);
-        assertTrue(text.contains("请输入 0 到 8"));
+        assertTrue(text.contains("请输入 0 到 11"));
+        assertTrue(text.contains("[INVALID_INPUT]"));
         assertTrue(text.contains("尚未实现"));
     }
 

@@ -2,6 +2,7 @@ package edu.cs307.metro.bootstrap;
 
 import edu.cs307.metro.config.DbConfig;
 import edu.cs307.metro.dao.DatabaseInfoDao;
+import edu.cs307.metro.dao.LineDao;
 import edu.cs307.metro.db.*;
 import edu.cs307.metro.service.*;
 import edu.cs307.metro.service.impl.*;
@@ -19,7 +20,7 @@ public final class AppBootstrap {
         RouteService routes = new JdbcRouteService(transactions);
         return new AppServices(
                 new JdbcStationService(transactions),
-                new JdbcLineService(transactions),
+                new JdbcLineService(transactions, new LineDao()),
                 new JdbcNeighborService(transactions),
                 routes,
                 new DefaultLandmarkService(transactions, routes),
