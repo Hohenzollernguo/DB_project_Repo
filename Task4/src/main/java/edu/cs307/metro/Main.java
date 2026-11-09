@@ -34,7 +34,7 @@ public final class Main {
         String mode = args.length == 0 ? "--cli" : args[0];
         if ("--help".equals(mode)) {
             output.println("用法：edu.cs307.metro.Main [--cli | --gui | --check-db | --help]");
-            output.println("默认 --cli；业务待实现；--check-db 仅检查连接与目标库身份。");
+            output.println("默认 --cli，支持线路添加、修改和删除。--check-db 检查连接与目标库身份。");
             return 0;
         }
         if (!"--cli".equals(mode) && !"--gui".equals(mode) && !"--check-db".equals(mode)) {
