@@ -6,10 +6,13 @@ import edu.cs307.metro.cli.CliApp;
 import edu.cs307.metro.common.AppException;
 import edu.cs307.metro.db.DatabaseStatus;
 import edu.cs307.metro.ui.DesktopApp;
+import edu.cs307.metro.routing.RouteCacheGenerator;
 import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public final class Main {
@@ -27,6 +30,9 @@ public final class Main {
 
     /** 返回状态码便于自动验证；默认 CLI，一次启动后可反复选择菜单。 */
     public static int run(String[] args, InputStream input, PrintStream output, PrintStream error) {
+        if (args.length > 0 && "--precompute-routes".equals(args[0])) {
+            return precomputeRoutes(args, output, error);
+        }
         if (args.length > 1) {
             error.println("只接受一个启动参数：--cli / --gui / --check-db / --help");
             return 2;
@@ -35,6 +41,7 @@ public final class Main {
         if ("--help".equals(mode)) {
             output.println("用法：edu.cs307.metro.Main [--cli | --gui | --check-db | --help]");
             output.println("默认 --cli，支持线路添加、修改和删除。--check-db 检查连接与目标库身份。");
+            output.println("预计算路线：--precompute-routes <站点CSV路径> <输出JSON路径>");
             return 0;
         }
         if (!"--cli".equals(mode) && !"--gui".equals(mode) && !"--check-db".equals(mode)) {
@@ -62,6 +69,26 @@ public final class Main {
             return 0;
         } catch (AppException failure) {
             error.printf("[%s] %s%n", failure.code(), failure.getMessage());
+            return 1;
+        }
+    }
+
+    private static int precomputeRoutes(String[] args, PrintStream output, PrintStream error) {
+        if (args.length != 3) {
+            error.println("用法：--precompute-routes <站点CSV路径> <输出JSON路径>");
+            return 2;
+        }
+        long start = System.nanoTime();
+        try {
+            var result = RouteCacheGenerator.generate(Path.of(args[1]), Path.of(args[2]), output);
+            output.printf("站点=%d，线路=%d，组合=%d，可达=%d，不可达=%d，文件字节=%d，耗时=%.3f 秒%n",
+                    result.stationCount(), result.lineCount(), result.routeCount(),
+                    result.reachableCount(), result.unreachableCount(), result.bytes(),
+                    (System.nanoTime() - start) / 1_000_000_000.0);
+            output.println("已生成：" + Path.of(args[2]).toAbsolutePath().normalize());
+            return 0;
+        } catch (IOException | IllegalArgumentException failure) {
+            error.println("路线预计算失败：" + failure.getMessage());
             return 1;
         }
     }

@@ -244,6 +244,8 @@ SQLSTATE 映射：23505 → DUPLICATE；23503 在删除时 → IN_USE，在写�
 
 ### 邻站与路径
 
+2026-11-10 增加固定数据的离线预计算入口 `--precompute-routes`，使用官方 CSV 生成 `cache/routes-cache.json`，每对可达起终点只保存一条最优路线。`PrecomputedRouteCache` 首次使用时建立内存索引，`JdbcRouteService` 的两个接口和 CLI 主菜单 5 已接入。算法、结果格式和运行方式见 [路线预计算](docs/路线预计算.md)。
+
 Q7 JDBC 调用应使用：
 
 ```sql
@@ -257,7 +259,7 @@ ORDER BY ord
 
 路径按“最少站间段 → 最少换乘 → 业务键签名字典序”选择。只在完整站序中相邻且两端均 Operation 时连边；不先过滤在建站后跨段连接。只允许同一 station_id 换乘，不自动连接线路首尾或不同分期。
 
-每次请求在一个只读 REPEATABLE READ 事务内加载拓扑。findBestRoute 对全部候选组合共用同一快照；后续请求重新加载，避免使用改线前的缓存。起终点相同且存在返回 0 段、0 换乘；目标不存在与无路线分别返回 NOT_FOUND / NO_ROUTE。
+2026-11-10 老师已确认路径功能始终使用固定数据的缓存，前面的数据库修改不影响查询路线。Service 在只读 REPEATABLE READ 事务内读取站点、线路的身份映射，按业务键查共享 JSON 内存索引。findBestRoute 对全部候选组合共用同一身份映射。路线和展示资料取缓存与其基准 CSV，已删除的途经站或线路仍按缓存展示，DTO ID 为 0 表示当前库中不存在的展示对象。起终点相同且存在返回 0 段、0 换乘；目标不存在与无路线分别返回 NOT_FOUND / NO_ROUTE。
 
 地标查找保留全部候选；完整名称查询与字面量前缀查询分别实现。A 调用 B 的 findBestRoute，选定出口并返回 LandmarkRoute。票价仍缺少经确认的计费规则和数据，RULE_NOT_CONFIGURED 不计为完成。
 

@@ -18,12 +18,15 @@ class ArchitectureTest {
     @Test
     void bootstrapAndPendingBusinessDoNotOpenConnectionsOrPretendSuccess() {
         var services = AppBootstrap.create(() -> { throw new AssertionError("Unexpected database access"); });
-        assertThrows(UnsupportedOperationException.class, () -> services.stations().search(""));
+        AppException invalidStationSearch = assertThrows(AppException.class,
+                () -> services.stations().search(null));
+        assertEquals(ErrorCode.INVALID_INPUT, invalidStationSearch.code());
         AppException invalidStops = assertThrows(AppException.class,
                 () -> services.lines().insertStops(1, 1, List.of()));
         assertEquals(ErrorCode.INVALID_INPUT, invalidStops.code());
         assertThrows(UnsupportedOperationException.class, () -> services.neighbors().get("a", "b", 1));
-        assertThrows(UnsupportedOperationException.class, () -> services.routes().findRoute(1, 2));
+        AppException invalidRoute = assertThrows(AppException.class, () -> services.routes().findRoute(0, 2));
+        assertEquals(ErrorCode.INVALID_INPUT, invalidRoute.code());
         assertThrows(UnsupportedOperationException.class, () -> services.landmarks().findRoute("a", "b"));
         FareQuote quote = services.fares().quote(1, 2);
         assertEquals("RULE_NOT_CONFIGURED", quote.status());
@@ -85,7 +88,7 @@ class ArchitectureTest {
     void defaultCliHandlesBadInputThenExitsWithoutDatabase() {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         PrintStream output = new PrintStream(buffer, true, StandardCharsets.UTF_8);
-        int code = Main.run(new String[0], new ByteArrayInputStream("bad\n2\n0\n测试线路\nTest Line\n1\n0\n".getBytes(StandardCharsets.UTF_8)),
+        int code = Main.run(new String[0], new ByteArrayInputStream("bad\n2\n0\n4\n0\n".getBytes(StandardCharsets.UTF_8)),
                 output, output);
         assertEquals(0, code);
         String text = buffer.toString(StandardCharsets.UTF_8);

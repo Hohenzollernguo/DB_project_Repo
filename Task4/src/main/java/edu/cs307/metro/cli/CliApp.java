@@ -13,6 +13,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /** 双方在对应菜单接入自己的服务；本类不包含 SQL 或事务。 */
 public final class CliApp {
@@ -30,7 +31,7 @@ public final class CliApp {
                     2. 修改线路中英文名
                     3. 站线关系（插入/移除）
                     4. 前后第 n 站（待接入）
-                    5. 两站路径（待实现）
+                    5. 两站路径
                     6. 两地标路线（待实现）
                     7. 票价（规则待配置）
                     8. 检查数据库连接
@@ -49,8 +50,9 @@ public final class CliApp {
                     case "1" -> {
                         if (!runStationMenu(input, output)) return;
                     }
-                    case "4", "5", "6" ->
+                    case "4", "6" ->
                             output.println("此功能的接口和入口已预留，业务与输入流程尚未实现。");
+                    case "5" -> runRouteQuery(input, output);
                     case "2" -> {
                         LineView selected = CliLineSelection.select(services.lines(), input, output, "修改");
                         if (selected == null) continue;
@@ -127,6 +129,22 @@ public final class CliApp {
             }
             output.println();
         }
+    }
+
+    private void runRouteQuery(Scanner input, PrintStream output) {
+        StationView from = selectStation(input, output, "作为起点");
+        if (from == null) return;
+        StationView to = selectStation(input, output, "作为终点");
+        if (to == null) return;
+        RouteResult result = services.routes().findRoute(from.stationId(), to.stationId());
+        output.printf("路线：%s → %s%n", from.key().chineseName(), to.key().chineseName());
+        for (int i = 0; i < result.legs().size(); i++) {
+            RouteLeg leg = result.legs().get(i);
+            if (i > 0) output.printf("在 %s 换乘。%n", leg.stations().get(0).key().chineseName());
+            output.printf("乘坐 %s：%s%n", leg.line().chineseName(), leg.stations().stream()
+                    .map(station -> station.key().chineseName()).collect(Collectors.joining(" → ")));
+        }
+        output.printf("共 %d 个站间段，换乘 %d 次。%n", result.stopCount(), result.transferCount());
     }
 
     /** 返回 true 表示回到主菜单，false 表示输入结束，需要退出程序。 */
