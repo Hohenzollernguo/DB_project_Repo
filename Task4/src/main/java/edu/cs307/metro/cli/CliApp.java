@@ -4,11 +4,8 @@ import edu.cs307.metro.bootstrap.AppServices;
 import edu.cs307.metro.common.AppException;
 import edu.cs307.metro.common.ErrorCode;
 import edu.cs307.metro.db.DatabaseStatus;
-import edu.cs307.metro.model.LineDraft;
-import edu.cs307.metro.model.LineStopView;
-import edu.cs307.metro.model.LineView;
-import edu.cs307.metro.model.StationView;
-import edu.cs307.metro.model.StopDraft;
+import edu.cs307.metro.model.*;
+
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -29,7 +26,7 @@ public final class CliApp {
         output.println("CS307 地铁管理系统 · Task4 开发骨架");
         while (true) {
             output.println("""
-                    1. 车站管理（新增/修改/删除/查询，待实现）
+                    1. 车站管理
                     2. 修改线路中英文名
                     3. 站线关系（插入/移除）
                     4. 前后第 n 站（待接入）
@@ -49,7 +46,10 @@ public final class CliApp {
             try {
                 switch (choice) {
                     case "0" -> { return; }
-                    case "1", "4", "5", "6" ->
+                    case "1" -> {
+                        if (!runStationMenu(input, output)) return;
+                    }
+                    case "4", "5", "6" ->
                             output.println("此功能的接口和入口已预留，业务与输入流程尚未实现。");
                     case "2" -> {
                         LineView selected = CliLineSelection.select(services.lines(), input, output, "修改");
@@ -127,6 +127,196 @@ public final class CliApp {
             }
             output.println();
         }
+    }
+
+    /** 返回 true 表示回到主菜单，false 表示输入结束，需要退出程序。 */
+    private boolean runStationMenu(Scanner input, PrintStream output) {
+        output.println();
+        output.println("""
+                车站管理
+                1. 新增车站
+                2. 修改车站
+                3. 删除车站
+                4. 查询车站
+                0. 返回主菜单
+                """);
+        output.print("请选择车站操作：");
+
+        if (!input.hasNextLine()) {
+            return false;
+        }
+
+        String stationChoice = input.nextLine().strip();
+
+        switch (stationChoice) {
+            case "1" -> {
+                output.print("请输入车站中文名：");
+                if (!input.hasNextLine()) return false;
+                String chineseName = input.nextLine();
+
+                output.print("请输入车站英文名：");
+                if (!input.hasNextLine()) return false;
+                String englishName = input.nextLine();
+
+                output.print("请输入行政区英文名：");
+                if (!input.hasNextLine()) return false;
+                String districtName = input.nextLine();
+
+                StationDraft draft = new StationDraft(chineseName, englishName, districtName);
+                StationView createdStation = services.stations().create(draft);
+
+                output.printf("新增成功：ID=%d，中文名=%s，行政区=%s，状态=%s%n",
+                        createdStation.stationId(),
+                        createdStation.key().chineseName(),
+                        createdStation.key().districtName(),
+                        createdStation.state());
+            }
+            case "2" -> {
+                StationView selectedStation = selectStation(input, output, "修改");
+                if (selectedStation == null) {
+                    return true;
+                }
+
+                long stationId = selectedStation.stationId();
+                output.printf("已选中：%s · %s%n",
+                        selectedStation.key().chineseName(),
+                        selectedStation.key().districtName());
+                output.print("请输入修改后的车站中文名：");
+                if (!input.hasNextLine()) {
+                    return false;
+                }
+                String newChineseName = input.nextLine();
+
+                output.print("请输入修改后的车站英文名：");
+                if (!input.hasNextLine()) {
+                    return false;
+                }
+                String newEnglishName = input.nextLine();
+
+                output.print("请输入修改后的行政区英文名：");
+                if (!input.hasNextLine()) {
+                    return false;
+                }
+                String newDistrictName = input.nextLine();
+
+                StationDraft draft = new StationDraft(newChineseName, newEnglishName, newDistrictName);
+                StationView updatedStation = services.stations().update(stationId, draft);
+
+                output.printf("修改成功：ID=%d | %s (%s) | %s | %s%n",
+                        updatedStation.stationId(),
+                        updatedStation.key().chineseName(),
+                        updatedStation.englishName(),
+                        updatedStation.key().districtName(),
+                        updatedStation.state());
+            }
+
+            case "3" -> {
+                StationView selectedStation = selectStation(input, output, "删除");
+                if (selectedStation == null) {
+                    return true;
+                }
+
+                long stationId = selectedStation.stationId();
+                StationKey key = selectedStation.key();
+                output.printf("确认删除车站 ID=%d（%s · %s）？输入 YES 确认，其他输入取消：",
+                        stationId, key.chineseName(), key.districtName());
+                if (!input.hasNextLine()) {
+                    return false;
+                }
+
+                String confirmation = input.nextLine().strip();
+                if (!"YES".equalsIgnoreCase(confirmation)) {
+                    output.println("已取消删除。");
+                    return true;
+                }
+
+                services.stations().delete(stationId);
+                output.printf("删除成功：ID=%d%n", stationId);
+            }
+            case "4" -> {
+                output.print("请输入车站中文或英文名 ：");
+                if (!input.hasNextLine()) {
+                    return false;
+                }
+
+                String keyword = input.nextLine();
+                List<StationView> stations = services.stations().search(keyword);
+
+                if (stations.isEmpty()) {
+                    output.println("未找到匹配的车站。");
+                } else {
+                    for (StationView station : stations) {
+                        StationKey key = station.key();
+                        output.printf("ID=%d | %s (%s) | %s | %s%n",
+                                station.stationId(),
+                                key.chineseName(),
+                                station.englishName(),
+                                key.districtName(),
+                                station.state());
+                    }
+                }
+            }
+            case "0" -> {
+                return true;
+            }
+            default -> {
+                output.println("请输入 0 到 4。");
+                return true;
+            }
+        }
+        return true;
+    }
+
+    private StationView selectStation(Scanner input, PrintStream output, String action) {
+        output.print("请输入要" + action + "的车站名（中文或英文）：");
+        if (!input.hasNextLine()) {
+            return null;
+        }
+
+        String keyword = input.nextLine().strip();
+        if (keyword.isEmpty()) {
+            output.println("请输入车站名关键词。");
+            return null;
+        }
+
+        List<StationView> candidates = services.stations().search(keyword);
+        if (candidates.isEmpty()) {
+            output.println("未找到匹配的车站。");
+            return null;
+        }
+
+        output.println("找到以下车站：");
+        for (StationView station : candidates) {
+            StationKey key = station.key();
+            output.printf("ID=%d | %s (%s) | %s%n",
+                    station.stationId(),
+                    key.chineseName(),
+                    station.englishName(),
+                    key.districtName());
+        }
+
+        output.print("请输入要" + action + "的车站 ID：");
+        if (!input.hasNextLine()) {
+            return null;
+        }
+
+        String stationIdText = input.nextLine().strip();
+        long stationId;
+        try {
+            stationId = Long.parseLong(stationIdText);
+        } catch (NumberFormatException exception) {
+            output.println("请输入列表中的数字 ID。");
+            return null;
+        }
+
+        for (StationView candidate : candidates) {
+            if (candidate.stationId() == stationId) {
+                return candidate;
+            }
+        }
+
+        output.println("这个 ID 不在刚才的候选列表里。");
+        return null;
     }
 
     /** 返回 true 表示回到主菜单，false 表示输入结束，需要退出程序。 */
