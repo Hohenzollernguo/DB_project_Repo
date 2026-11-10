@@ -244,6 +244,8 @@ SQLSTATE 映射：23505 → DUPLICATE；23503 在删除时 → IN_USE，在写�
 
 ### 邻站与路径
 
+2026-11-10 增加固定数据的离线预计算入口 `--precompute-routes`，使用官方 CSV 生成 `cache/routes-cache.json`，每对可达起终点只保存一条最优路线。`PrecomputedRouteCache` 首次使用时建立内存索引，`JdbcRouteService` 的两个接口和 CLI 主菜单 5 已接入。算法、结果格式和运行方式见 [路线预计算](docs/路线预计算.md)。
+
 Q7 JDBC 调用应使用：
 
 ```sql
@@ -253,11 +255,11 @@ WITH ORDINALITY AS t(name, ord)
 ORDER BY ord
 ```
 
-固定读取两行，先前站后后站；null 仍保留。当前仓库 Q7 的自定义 RAISE EXCEPTION 未设置约定的 ERRCODE，会默认成为 P0001。接入前需由 B 将相应异常对齐 22023/P0002/P0003，并与 A 的正式导入同步。此项须在接入时与共享 SQL 一起处理。
+2026-11-10 已通过 NeighborDao、JdbcNeighborService 接入 CLI 主菜单 4。固定读取两行，先站序减小侧后站序增大侧，null 保留并显示越界提示，n 为 0 时两侧均为本站。服务在开启只读快照前校验名称和非负 n。Task3/src/queries.sql 的 Q7 已将无效 n、目标缺失、歧义异常对齐 22023/P0002/P0003，并以 bigint 运算支持完整的非负 int 范围。导入脚本继续只负责七表数据，运行邻站查询前须完整执行 Q7 函数定义，旧数据库也按此方式更新函数。
 
 路径按“最少站间段 → 最少换乘 → 业务键签名字典序”选择。只在完整站序中相邻且两端均 Operation 时连边；不先过滤在建站后跨段连接。只允许同一 station_id 换乘，不自动连接线路首尾或不同分期。
 
-每次请求在一个只读 REPEATABLE READ 事务内加载拓扑。findBestRoute 对全部候选组合共用同一快照；后续请求重新加载，避免使用改线前的缓存。起终点相同且存在返回 0 段、0 换乘；目标不存在与无路线分别返回 NOT_FOUND / NO_ROUTE。
+2026-11-10 老师已确认路径功能始终使用固定数据的缓存，前面的数据库修改不影响查询路线。Service 在只读 REPEATABLE READ 事务内读取站点、线路的身份映射，按业务键查共享 JSON 内存索引。findBestRoute 对全部候选组合共用同一身份映射。路线和展示资料取缓存与其基准 CSV，已删除的途经站或线路仍按缓存展示，DTO ID 为 0 表示当前库中不存在的展示对象。起终点相同且存在返回 0 段、0 换乘；目标不存在与无路线分别返回 NOT_FOUND / NO_ROUTE。
 
 地标查找保留全部候选；完整名称查询与字面量前缀查询分别实现。A 调用 B 的 findBestRoute，选定出口并返回 LandmarkRoute。票价仍缺少经确认的计费规则和数据，RULE_NOT_CONFIGURED 不计为完成。
 

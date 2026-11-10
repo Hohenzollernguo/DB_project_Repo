@@ -1,14 +1,17 @@
 package edu.cs307.metro.service.impl;
 
+import edu.cs307.metro.common.AppException;
+import edu.cs307.metro.common.ErrorCode;
+import edu.cs307.metro.dao.NeighborDao;
 import edu.cs307.metro.db.Transactions;
-import edu.cs307.metro.model.*;
-import edu.cs307.metro.service.*;
-import java.util.List;
+import edu.cs307.metro.model.NeighborPair;
+import edu.cs307.metro.service.NeighborService;
 import java.util.Objects;
 
-/** 开发骨架：实现规则见架构说明。完成业务前明确失败，不返回伪造成功结果。 */
+/** 邻站查询在同一只读快照内调用数据库 Q7 函数。 */
 public final class JdbcNeighborService implements NeighborService {
-    protected final Transactions transactions;
+    private final Transactions transactions;
+    private final NeighborDao neighborDao = new NeighborDao();
 
     public JdbcNeighborService(Transactions transactions) {
         this.transactions = Objects.requireNonNull(transactions);
@@ -16,6 +19,18 @@ public final class JdbcNeighborService implements NeighborService {
 
     @Override
     public NeighborPair get(String stationEnglishName, String lineEnglishName, int n) {
-        throw new UnsupportedOperationException("NeighborService 的 get 功能待实现");
+        String station = normalizeName(stationEnglishName, "车站英文名");
+        String line = normalizeName(lineEnglishName, "线路英文名");
+        if (n < 0) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "n 必须是非负整数。");
+        }
+        return transactions.readSnapshot(connection -> neighborDao.get(connection, station, line, n));
+    }
+
+    private static String normalizeName(String name, String label) {
+        if (name == null || name.strip().isEmpty() || name.indexOf('\0') >= 0) {
+            throw new AppException(ErrorCode.INVALID_INPUT, label + "不能为空白或包含空字符。");
+        }
+        return name.strip();
     }
 }
