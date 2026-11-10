@@ -30,7 +30,7 @@ public final class CliApp {
                     1. 车站管理
                     2. 修改线路中英文名
                     3. 站线关系（插入/移除）
-                    4. 前后第 n 站（待接入）
+                    4. 前后第 n 站
                     5. 两站路径
                     6. 两地标路线（待实现）
                     7. 票价（规则待配置）
@@ -50,7 +50,8 @@ public final class CliApp {
                     case "1" -> {
                         if (!runStationMenu(input, output)) return;
                     }
-                    case "4", "6" ->
+                    case "4" -> runNeighborQuery(input, output);
+                    case "6" ->
                             output.println("此功能的接口和入口已预留，业务与输入流程尚未实现。");
                     case "5" -> runRouteQuery(input, output);
                     case "2" -> {
@@ -129,6 +130,26 @@ public final class CliApp {
             }
             output.println();
         }
+    }
+
+    private void runNeighborQuery(Scanner input, PrintStream output) {
+        String station = readLine(input, output, "请输入车站英文名，例如 Mawan：");
+        if (station == null) return;
+        String line = readLine(input, output, "请输入线路英文名，例如 Line 5：");
+        if (line == null) return;
+        String count = readLine(input, output, "请输入 n（非负整数，0 表示本站）：");
+        if (count == null) return;
+        final int n;
+        try {
+            n = Integer.parseInt(count);
+        } catch (NumberFormatException failure) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "n 必须是 0 到 2147483647 之间的整数。");
+        }
+        NeighborPair result = services.neighbors().get(station, line, n);
+        output.printf("向前第 %d 站（站序减小）：%s%n", n,
+                result.lowerPositionName() == null ? "无此站（超出线路范围）" : result.lowerPositionName());
+        output.printf("向后第 %d 站（站序增大）：%s%n", n,
+                result.higherPositionName() == null ? "无此站（超出线路范围）" : result.higherPositionName());
     }
 
     private void runRouteQuery(Scanner input, PrintStream output) {

@@ -52,7 +52,7 @@ order by s.english_name, d.name_en, s.chinese_name, e.exit_code, m.name;
 
 -- Q7（B）：查询指定车站前后相隔 n 站的车站。
 -- 先完整执行函数定义（到 $$;），再执行调用语句。
-CREATE OR REPLACE function get_station_n_neighbor(station_name text, line_name text, n integer)
+CREATE OR REPLACE function public.get_station_n_neighbor(station_name text, line_name text, n integer)
     returns setof text
     language plpgsql
 as
@@ -63,16 +63,16 @@ declare
 begin
 
     if n isnull or n < 0 then
-        raise exception 'n无效';
+        raise exception 'n无效' using errcode = '22023';
     end if;
 
     with t1 as (select station_id, position, english_name
                 from (select station_id, position
-                      from line_station
+                      from public.line_station
                       where line_id = (select line_id
-                                       from metro_line
+                                       from public.metro_line
                                        where english_name = line_name)) as t
-                         natural left join station),
+                         natural left join public.station),
          t2 as (select position, english_name
                 from t1
                 where english_name = station_name)
@@ -80,9 +80,9 @@ begin
     into strict prename,nextname
     from (
              t2 left join (select position, english_name as pre_name
-                           from t1) as t3 on t2.position = t3.position + n left join (select position, english_name as after_name
+                           from t1) as t3 on t2.position = t3.position::bigint + n left join (select position, english_name as after_name
                                                                                       from t1) as t4
-             on t2.position = t4.position - n
+             on t2.position = t4.position::bigint - n
              );
     return next prename;
     return next nextname;
@@ -91,12 +91,12 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RAISE EXCEPTION
             '线路 % 不存在，或站点 % 不在这条线路上',
-            line_name, station_name;
+            line_name, station_name using errcode = 'P0002';
 
     WHEN TOO_MANY_ROWS THEN
         RAISE EXCEPTION
             '线路 % 内有多个英文名为 % 的车站，无法唯一定位',
-            line_name, station_name;
+            line_name, station_name using errcode = 'P0003';
 end;
 $$;
 

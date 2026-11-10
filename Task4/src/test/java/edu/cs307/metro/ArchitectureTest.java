@@ -24,7 +24,9 @@ class ArchitectureTest {
         AppException invalidStops = assertThrows(AppException.class,
                 () -> services.lines().insertStops(1, 1, List.of()));
         assertEquals(ErrorCode.INVALID_INPUT, invalidStops.code());
-        assertThrows(UnsupportedOperationException.class, () -> services.neighbors().get("a", "b", 1));
+        AppException invalidNeighbor = assertThrows(AppException.class,
+                () -> services.neighbors().get("a", "b", -1));
+        assertEquals(ErrorCode.INVALID_INPUT, invalidNeighbor.code());
         AppException invalidRoute = assertThrows(AppException.class, () -> services.routes().findRoute(0, 2));
         assertEquals(ErrorCode.INVALID_INPUT, invalidRoute.code());
         assertThrows(UnsupportedOperationException.class, () -> services.landmarks().findRoute("a", "b"));
@@ -88,7 +90,7 @@ class ArchitectureTest {
     void defaultCliHandlesBadInputThenExitsWithoutDatabase() {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         PrintStream output = new PrintStream(buffer, true, StandardCharsets.UTF_8);
-        int code = Main.run(new String[0], new ByteArrayInputStream("bad\n2\n0\n4\n0\n".getBytes(StandardCharsets.UTF_8)),
+        int code = Main.run(new String[0], new ByteArrayInputStream("bad\n2\n0\n6\n0\n".getBytes(StandardCharsets.UTF_8)),
                 output, output);
         assertEquals(0, code);
         String text = buffer.toString(StandardCharsets.UTF_8);
