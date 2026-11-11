@@ -106,7 +106,15 @@ public final class JdbcLineService implements LineService {
 
     @Override
     public List<LineStopView> getStops(long lineId) {
-        throw new UnsupportedOperationException("LineService 的 getStops 功能待实现");
+        if (lineId <= 0) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "线路 ID 必须是正整数。");
+        }
+        return transactions.readSnapshot(connection -> {
+            if (!lineDao.exists(connection, lineId)) {
+                throw new AppException(ErrorCode.NOT_FOUND, "指定线路不存在。");
+            }
+            return lineStationDao.findByLine(connection, lineId);
+        });
     }
 
     @Override
