@@ -1,14 +1,47 @@
 package edu.cs307.metro.dao;
 
 import edu.cs307.metro.model.StopDraft;
+import edu.cs307.metro.model.LineStopView;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalInt;
 
 public class LineStationDao {
+    /** 返回全部站点，包括在建站；车站展示状态综合其全部线路关系派生。 */
+    public List<LineStopView> findByLine(Connection connection, long lineId) throws SQLException {
+        String sql = "WITH station_details AS (\n" + StationDao.STATION_SELECT_SQL + """
+                )
+                SELECT sd.*, ls.line_id, ls.position, ls.status, ls.opening_year,
+                       ls.start_time, ls.end_time, ls.source_latitude, ls.source_longitude
+                FROM public.line_station ls
+                JOIN station_details sd ON sd.station_id = ls.station_id
+                WHERE ls.line_id = ?
+                ORDER BY ls.position
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, lineId);
+            try (ResultSet rows = statement.executeQuery()) {
+                List<LineStopView> stops = new ArrayList<>();
+                while (rows.next()) {
+                    StopDraft attributes = new StopDraft(rows.getLong("station_id"),
+                            rows.getString("status"), rows.getInt("opening_year"),
+                            rows.getObject("start_time", LocalTime.class),
+                            rows.getObject("end_time", LocalTime.class),
+                            rows.getBigDecimal("source_latitude"), rows.getBigDecimal("source_longitude"));
+                    stops.add(new LineStopView(rows.getLong("line_id"), rows.getInt("position"),
+                            StationDao.readStation(rows), attributes));
+                }
+                return List.copyOf(stops);
+            }
+        }
+    }
+
 
     public long countStops(Connection connection, long lineId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM public.line_station WHERE line_id = ?";

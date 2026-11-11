@@ -11,6 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LineDao {
+    public boolean exists(Connection connection, long lineId) throws SQLException {
+        String sql = "SELECT 1 FROM public.metro_line WHERE line_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, lineId);
+            try (ResultSet rows = statement.executeQuery()) {
+                return rows.next();
+            }
+        }
+    }
+
     /** 新线路由数据库分配 ID，返回已写入的完整线路资料。 */
     public LineView insert(Connection connection, LineDraft input) throws SQLException {
         String sql = """

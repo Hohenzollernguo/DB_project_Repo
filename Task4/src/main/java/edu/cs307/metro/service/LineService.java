@@ -18,6 +18,7 @@ public interface LineService {
      * 结果中的 lineId 取数据库内部 ID。无匹配时返回空列表。
      */
     List<LineView> search(String keyword);
+    /** 按站序返回全部站点及站线属性；空线返回空列表，线路不存在返回 NOT_FOUND。 */
     List<LineStopView> getStops(long lineId);
     void insertStops(long lineId, int position, List<StopDraft> stops);
     void updateStop(long lineId, StopDraft stop);
