@@ -25,7 +25,11 @@ public final class DefaultLandmarkService implements LandmarkService {
 
     @Override
     public List<LandmarkHit> searchPrefix(String literalPrefix) {
-        throw new UnsupportedOperationException("LandmarkService 的 searchPrefix 功能待实现");
+        if (literalPrefix == null) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "请输入地标名称。");
+        }
+        String prefix = literalPrefix.strip();
+        return transactions.readSnapshot(connection -> landmarkDao.searchPrefix(connection, prefix));
     }
 
     @Override

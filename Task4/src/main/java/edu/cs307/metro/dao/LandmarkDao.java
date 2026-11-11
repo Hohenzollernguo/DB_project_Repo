@@ -12,7 +12,7 @@ import java.util.List;
 
 public final class LandmarkDao {
 
-    private static final String FIND_BY_NAME_SQL =
+    private static final String SELECT_LANDMARK_SQL =
             "with station_details as (\n" + StationDao.STATION_SELECT_SQL + """
         )
         select m.landmark_id, m.name as landmark_name,
@@ -22,15 +22,32 @@ public final class LandmarkDao {
         join public.exit_landmark as em on em.landmark_id = m.landmark_id
         join public.station_exit as e on e.exit_id = em.exit_id
         join station_details as sd on sd.station_id = e.station_id
-         where m.name = ?
-        order by m.name, e.station_id, e.exit_code
         """;
+
     public List<LandmarkHit> findByName(Connection connection, String landmarkName)
+            throws SQLException {
+        String sql = SELECT_LANDMARK_SQL + """
+                where m.name = ?
+                order by m.name, e.station_id, e.exit_code
+                """;
+        return find(connection, sql, landmarkName);
+    }
+
+    public List<LandmarkHit> searchPrefix(Connection connection, String prefix)
+            throws SQLException {
+        String sql = SELECT_LANDMARK_SQL + """
+                where starts_with(m.name, ?)
+                order by m.landmark_id, e.station_id, e.exit_code
+                """;
+        return find(connection, sql, prefix);
+    }
+
+    private List<LandmarkHit> find(Connection connection, String sql, String name)
             throws SQLException {
         List<LandmarkHit> hits = new ArrayList<>();
 
-        try (PreparedStatement statement = connection.prepareStatement(FIND_BY_NAME_SQL)) {
-            statement.setString(1, landmarkName);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
 
             try (ResultSet rows = statement.executeQuery()) {
                 while (rows.next()) {
