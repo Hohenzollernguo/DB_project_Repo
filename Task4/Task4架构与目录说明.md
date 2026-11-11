@@ -146,10 +146,10 @@ DTO 使用 Java record，例如 `line.lineId()`、`input.chineseName()`。A、B 
 
 `RouteLeg` 和 `RouteResult` 复制传入的 List，防止调用方修改已返回的路径。站线状态保留合同中的 String 值 Operation / Construction；StationView 的 UNASSIGNED 仅为展示状态，不能写入 line_station.status。
 
-六个接口与 PDF 保持相同签名：
+团队约定中的六个接口：
 
 - `StationService`：create、update、delete、search。
-- `LineService`：create、update、delete、search、getStops、insertStops、updateStop、removeStop。
+- `LineService`：create、update、delete、search、getStops、insertStops、removeStop。
 - `NeighborService`：get。
 - `RouteService`：findRoute、findBestRoute。
 - `LandmarkService`：searchPrefix、findRoute。
@@ -164,7 +164,7 @@ DTO 使用 Java record，例如 `line.lineId()`、`input.chineseName()`。A、B 
 | 人员 | 文件/功能入口 | 预期工作 |
 |---|---|---|
 | B | Main、bootstrap、config、db、common、model、service 接口 | 维护共同骨架；公共合同变更需双方同步 |
-| B | JdbcLineService | 线路 CRUD、站线插入/移除、站线属性修改 |
+| B | JdbcLineService | 线路 CRUD、站序查询、站线插入/移除 |
 | B | JdbcNeighborService | 调用已有数据库函数，保留两行顺序和 null |
 | B | JdbcRouteService | 两站路径与多候选最优路径 |
 | A | JdbcStationService | 车站 CRUD、展示状态派生、删除出口关联规则 |
@@ -215,7 +215,7 @@ SQLSTATE 映射：23505 → DUPLICATE；23503 在删除时 → IN_USE，在写�
 - 修改和删除的用户输入为线路编号。交互层调用 search 查询，单条自动选定，多条列出 ID 和中英文名供选择，随后使用选中记录的内部 lineId 调用 update 或 delete。
 - 编号须为去除首尾空白后的正整数字符串。未找到候选时给出反馈，多候选时只接受当前列表中的 ID。CLI 留空取消选择，删除仍须输入 YES 确认。Swing 使用后台查询，修改编号后使旧候选和确认失效，重新查询后才能提交。
 - 修改线路中英文名时保留 line_id；两种名称各自唯一。
-- update 是资料全量替换；updateStop 只修改站线属性，不修改位置。
+- update 是资料全量替换。
 - 有站线关系的线路不能直接删除；从线路移除站点不删除 station、出口或其他线路的关联。
 - 插入位置 p 的范围为 1..N+1；空线只接受 1；批量列表非空、无重复，每站存在且尚未属于该线。
 - 每个 StopDraft 必须提供合法 status、openingYear；时间、坐标可空。openingYear 还必须适合数据库 SMALLINT。
