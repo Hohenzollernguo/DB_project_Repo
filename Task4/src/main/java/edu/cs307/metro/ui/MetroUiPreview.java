@@ -5,6 +5,12 @@ import edu.cs307.metro.bootstrap.AppServices;
 import edu.cs307.metro.common.AppException;
 import edu.cs307.metro.common.ErrorCode;
 import edu.cs307.metro.model.StationView;
+import edu.cs307.metro.model.StationDraft;
+import edu.cs307.metro.model.LineDraft;
+import edu.cs307.metro.model.LineView;
+import edu.cs307.metro.model.LineStopView;
+import edu.cs307.metro.model.StopDraft;
+import edu.cs307.metro.model.NeighborPair;
 import edu.cs307.metro.model.FareQuote;
 import edu.cs307.metro.model.LandmarkHit;
 import edu.cs307.metro.model.LandmarkRoute;
@@ -30,6 +36,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
@@ -40,11 +48,13 @@ import java.util.function.Function;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.JPanel;
@@ -62,7 +72,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-/** 地铁管理界面的独立布局预览。 */
+/** 地铁管理图形界面。 */
 public final class MetroUiPreview {
     private static final Color BACKGROUND = new Color(241, 246, 253);
     private static final Color BLUE = new Color(36, 104, 219);
@@ -75,6 +85,10 @@ public final class MetroUiPreview {
     }
 
     public static void main(String[] args) {
+        show(AppBootstrap.create());
+    }
+
+    public static void show(AppServices services) {
         SwingUtilities.invokeLater(() -> {
             Font font = new Font("Microsoft YaHei", Font.PLAIN, 14);
             UIManager.put("Label.font", font);
@@ -84,8 +98,7 @@ public final class MetroUiPreview {
             UIManager.put("TableHeader.font", font);
 
 
-            AppServices services = AppBootstrap.create();
-            JFrame frame = new JFrame("深圳地铁管理系统 · 界面预览");
+            JFrame frame = new JFrame("深圳地铁管理系统");
             frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             frame.setContentPane(createContent(services));
             frame.setMinimumSize(new Dimension(900, 600));
@@ -106,11 +119,9 @@ public final class MetroUiPreview {
         JPanel pages = new JPanel(new CardLayout());
         pages.setBackground(BACKGROUND);
         pages.add(routePage(services), "路线查询");
-        pages.add(managementPage("车站管理", "输入车站中文名或英文名",
-                new String[]{"ID", "中文名", "英文名", "行政区", "状态"}, "新增车站"), "车站管理");
-        pages.add(managementPage("线路管理", "输入线路编号",
-                new String[]{"ID", "中文名", "英文名"}, "新增线路"), "线路管理");
-        pages.add(lineStationPage(), "站线管理");
+        pages.add(managementPage(services, true), "车站管理");
+        pages.add(managementPage(services, false), "线路管理");
+        pages.add(lineStationPage(services), "站线管理");
 
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(Color.WHITE);
@@ -529,11 +540,13 @@ public final class MetroUiPreview {
         });
         content.add(new JScrollPane(candidates), BorderLayout.CENTER);
 
-        JLabel status = new JLabel("输入" + itemName + "名或 ID 后查询。");
+        String searchPrompt = "线路".equals(itemName) ? "输入线路编号查询，留空显示全部。"
+                : "输入" + itemName + "名或 ID 后查询。";
+        JLabel status = new JLabel(searchPrompt);
         keyword.getDocument().addDocumentListener(new DocumentListener() {
             private void changed() {
                 model.clear();
-                status.setText("输入" + itemName + "名或 ID 后查询。");
+                status.setText(searchPrompt);
             }
 
             @Override
@@ -673,8 +686,12 @@ public final class MetroUiPreview {
         return List.of();
     }
 
-    private static JPanel managementPage(String title, String searchHint, String[] columns,
-                                         String createLabel) {
+    private static JPanel managementPage(AppServices services, boolean stationPage) {
+        String title = stationPage ? "车站管理" : "线路管理";
+        String searchHint = stationPage ? "车站中英文名（留空查询全部）" : "线路编号（留空查询全部）";
+        String[] columns = stationPage ? new String[]{"ID", "中文名", "英文名", "行政区", "状态"}
+                : new String[]{"ID", "中文名", "英文名"};
+        String createLabel = stationPage ? "新增车站" : "新增线路";
         JPanel page = page(title);
         JPanel content = new RoundedPanel(Color.WHITE, 24);
         content.setLayout(new BorderLayout(0, 16));
@@ -686,7 +703,8 @@ public final class MetroUiPreview {
         keyword.setToolTipText(searchHint);
         search.add(new JLabel(searchHint), BorderLayout.WEST);
         search.add(keyword, BorderLayout.CENTER);
-        search.add(primaryButton("查询"), BorderLayout.EAST);
+        JButton searchButton = primaryButton("查询");
+        search.add(searchButton, BorderLayout.EAST);
         content.add(search, BorderLayout.NORTH);
 
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
@@ -711,23 +729,485 @@ public final class MetroUiPreview {
 
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         actions.setOpaque(false);
-        actions.add(primaryButton(createLabel));
-        actions.add(secondaryButton("修改所选"));
-        actions.add(secondaryButton("删除所选"));
+        JButton createButton = primaryButton(createLabel);
+        JButton updateButton = secondaryButton("修改所选");
+        JButton deleteButton = secondaryButton("删除所选");
+        actions.add(createButton);
+        actions.add(updateButton);
+        actions.add(deleteButton);
+        JLabel status = new JLabel("请输入查询条件，或新增记录。");
+        status.setForeground(MUTED);
+        actions.add(status);
         content.add(actions, BorderLayout.SOUTH);
         page.add(content, BorderLayout.CENTER);
+
+        List<Object> results = new ArrayList<>();
+        JButton[] buttons = {searchButton, createButton, updateButton, deleteButton};
+        Runnable searchAction = () -> {
+            if (!searchButton.isEnabled()) return;
+            String query = keyword.getText().strip();
+            runManagementTask(buttons, status, "正在查询…", () -> stationPage
+                    ? services.stations().search(query)
+                    : query.isEmpty() ? LineCatalog.listAll() : services.lines().search(query), matches -> {
+                results.clear();
+                results.addAll(matches);
+                results.sort(Comparator.comparingLong(item -> stationPage
+                        ? ((StationView) item).stationId() : ((LineView) item).lineId()));
+                model.setRowCount(0);
+                for (Object item : results) {
+                    addManagementRow(model, item);
+                }
+                status.setText("查询完成，共 " + results.size() + " 条。");
+            });
+        };
+        searchButton.addActionListener(event -> searchAction.run());
+        keyword.addActionListener(event -> searchAction.run());
+
+        createButton.addActionListener(event -> {
+            Object draft = managementDraft(page, stationPage, null);
+            if (draft == null) return;
+            runManagementTask(buttons, status, "正在新增…", () -> stationPage
+                    ? services.stations().create((StationDraft) draft)
+                    : services.lines().create((LineDraft) draft), created -> {
+                results.clear();
+                results.add(created);
+                model.setRowCount(0);
+                addManagementRow(model, created);
+                status.setText("新增成功。");
+            });
+        });
+
+        updateButton.addActionListener(event -> {
+            int row = table.getSelectedRow();
+            if (row < 0) {
+                status.setText("请先从查询结果中选择一行。");
+                return;
+            }
+            Object selected = results.get(table.convertRowIndexToModel(row));
+            Object draft = managementDraft(page, stationPage, selected);
+            if (draft == null) return;
+            runManagementTask(buttons, status, "正在修改…", () -> stationPage
+                    ? services.stations().update(((StationView) selected).stationId(), (StationDraft) draft)
+                    : services.lines().update(((LineView) selected).lineId(), (LineDraft) draft), updated -> {
+                int index = results.indexOf(selected);
+                results.set(index, updated);
+                model.removeRow(index);
+                insertManagementRow(model, index, updated);
+                status.setText("修改成功。");
+            });
+        });
+
+        deleteButton.addActionListener(event -> {
+            int row = table.getSelectedRow();
+            if (row < 0) {
+                status.setText("请先从查询结果中选择一行。");
+                return;
+            }
+            Object selected = results.get(table.convertRowIndexToModel(row));
+            String description = stationPage
+                    ? ((StationView) selected).key().chineseName() + " · "
+                        + ((StationView) selected).key().districtName() + "（ID=" + ((StationView) selected).stationId() + "）"
+                    : ((LineView) selected).chineseName() + "（ID=" + ((LineView) selected).lineId() + "）";
+            String warning = stationPage ? "删除车站会同时删除其出口及出口地标关联；若仍关联线路则无法删除。"
+                    : "线路仍有关联站点时无法删除，请先移除站线关系。";
+            if (JOptionPane.showConfirmDialog(page, "确定删除 " + description + " 吗？\n" + warning,
+                    "确认删除", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) return;
+            runManagementTask(buttons, status, "正在删除…", () -> {
+                if (stationPage) services.stations().delete(((StationView) selected).stationId());
+                else services.lines().delete(((LineView) selected).lineId());
+                return selected;
+            }, deleted -> {
+                int index = results.indexOf(deleted);
+                results.remove(index);
+                model.removeRow(index);
+                status.setText("删除成功。");
+            });
+        });
         return page;
     }
 
-    private static JPanel lineStationPage() {
+    private static Object managementDraft(JPanel parent, boolean stationPage, Object selected) {
+        StationView station = stationPage && selected != null ? (StationView) selected : null;
+        LineView line = !stationPage && selected != null ? (LineView) selected : null;
+        JTextField chinese = textField(20);
+        JTextField english = textField(20);
+        JTextField district = textField(20);
+        if (station != null) {
+            chinese.setText(station.key().chineseName());
+            english.setText(station.englishName());
+            district.setText(station.key().districtName());
+        } else if (line != null) {
+            chinese.setText(line.chineseName());
+            english.setText(line.englishName());
+        }
+        JPanel form = new JPanel(new GridLayout(stationPage ? 3 : 2, 2, 10, 10));
+        form.add(new JLabel("中文名"));
+        form.add(chinese);
+        form.add(new JLabel("英文名"));
+        form.add(english);
+        if (stationPage) {
+            form.add(new JLabel("行政区英文名"));
+            form.add(district);
+        }
+        String title = (selected == null ? "新增" : "修改") + (stationPage ? "车站" : "线路");
+        if (JOptionPane.showConfirmDialog(parent, form, title, JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE) != JOptionPane.OK_OPTION) return null;
+        if (stationPage) return new StationDraft(chinese.getText(), english.getText(), district.getText());
+        return new LineDraft(chinese.getText(), english.getText());
+    }
+
+    private static void addManagementRow(DefaultTableModel model, Object item) {
+        insertManagementRow(model, model.getRowCount(), item);
+    }
+
+    private static void insertManagementRow(DefaultTableModel model, int index, Object item) {
+        if (item instanceof StationView station) {
+            model.insertRow(index, new Object[]{station.stationId(), station.key().chineseName(),
+                    station.englishName(), station.key().districtName(), station.state()});
+        } else if (item instanceof LineView line) {
+            model.insertRow(index, new Object[]{line.lineId(), line.chineseName(), line.englishName()});
+        }
+    }
+
+    private static <T> void runManagementTask(JButton[] buttons, JLabel status, String message,
+                                               java.util.concurrent.Callable<T> work,
+                                               java.util.function.Consumer<T> onSuccess) {
+        for (JButton button : buttons) button.setEnabled(false);
+        status.setText(message);
+        new SwingWorker<T, Void>() {
+            @Override
+            protected T doInBackground() throws Exception {
+                return work.call();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    onSuccess.accept(get());
+                } catch (InterruptedException failure) {
+                    Thread.currentThread().interrupt();
+                    status.setText("操作被中断，请查询确认结果。");
+                } catch (ExecutionException failure) {
+                    Throwable cause = failure.getCause();
+                    String detail = cause instanceof AppException ? cause.getMessage() : "请检查连接或输入后重试。";
+                    status.setText("操作失败：" + detail);
+                    JOptionPane.showMessageDialog(status, detail, "操作失败", JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    for (JButton button : buttons) button.setEnabled(true);
+                }
+            }
+        }.execute();
+    }
+
+    private static JPanel lineStationPage(AppServices services) {
         JPanel page = page("站线管理");
-        JPanel forms = new JPanel(new CardLayout());
-        forms.setOpaque(false);
-        forms.add(simpleForm("选择线路", "选择车站", "插入位置", "运营状态", "插入车站"), "插入车站");
-        forms.add(simpleForm("选择线路", "选择车站", null, null, "移除车站"), "移除车站");
-        forms.add(simpleForm("选择线路", "选择车站", "输入 n", null, "查询"), "前后第 n 站");
-        page.add(withTabs(forms, "插入车站", "移除车站", "前后第 n 站"), BorderLayout.CENTER);
+        JPanel content = new RoundedPanel(Color.WHITE, 24);
+        content.setLayout(new BorderLayout(0, 16));
+        content.setBorder(BorderFactory.createEmptyBorder(22, 24, 22, 24));
+
+        JTextField lineField = textField(25);
+        lineField.setToolTipText("输入线路编号并选择候选，例如 1");
+        installSuggestions(lineField, "selectedLine", keyword -> {
+            if (!keyword.matches("[1-9][0-9]*")) return List.of();
+            List<LineView> matches = new ArrayList<>(services.lines().search(keyword));
+            matches.sort(Comparator.comparingLong(LineView::lineId));
+            return matches;
+        }, line -> line.chineseName() + " / " + line.englishName() + "  (ID: " + line.lineId() + ")",
+                line -> line.chineseName() + " / " + line.englishName() + "  (ID: " + line.lineId() + ")");
+        JButton chooseLine = secondaryButton("选择线路");
+        JPanel top = new JPanel(new BorderLayout(10, 0));
+        top.setOpaque(false);
+        top.add(new JLabel("线路"), BorderLayout.WEST);
+        top.add(lineField, BorderLayout.CENTER);
+        JPanel lineButtons = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        lineButtons.setOpaque(false);
+        lineButtons.add(chooseLine);
+        top.add(lineButtons, BorderLayout.EAST);
+        content.add(top, BorderLayout.NORTH);
+
+        DefaultTableModel model = new DefaultTableModel(
+                new String[]{"站序", "车站 ID", "中文名", "英文名", "行政区", "站线状态", "开通年份"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
+        JTable table = new JTable(model);
+        table.setRowHeight(42);
+        table.setSelectionBackground(new Color(220, 234, 255));
+        table.setSelectionForeground(TEXT);
+        table.setShowVerticalLines(false);
+        table.setGridColor(new Color(232, 238, 247));
+        table.setIntercellSpacing(new Dimension(0, 1));
+        table.getTableHeader().setBackground(new Color(232, 240, 252));
+        table.getTableHeader().setForeground(TEXT);
+        table.getTableHeader().setPreferredSize(new Dimension(0, 40));
+        table.setFillsViewportHeight(true);
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setBorder(BorderFactory.createLineBorder(new Color(224, 234, 248)));
+        scroll.getViewport().setBackground(Color.WHITE);
+        content.add(scroll, BorderLayout.CENTER);
+
+        JButton insert = primaryButton("插入车站");
+        JButton remove = secondaryButton("移除所选车站");
+        JButton neighbors = secondaryButton("查询前后第 n 站");
+        JLabel status = new JLabel("请选择线路。");
+        status.setForeground(MUTED);
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        actions.setOpaque(false);
+        actions.add(insert);
+        actions.add(remove);
+        actions.add(neighbors);
+        actions.add(status);
+        content.add(actions, BorderLayout.SOUTH);
+        page.add(content, BorderLayout.CENTER);
+
+        List<LineStopView> stops = new ArrayList<>();
+        JButton[] buttons = {chooseLine, insert, remove, neighbors};
+        chooseLine.addPropertyChangeListener("enabled", event -> lineField.setEditable(chooseLine.isEnabled()));
+        Runnable refresh = () -> {
+            LineView line = (LineView) lineField.getClientProperty("selectedLine");
+            if (line == null) {
+                status.setText("请先选择线路。");
+                return;
+            }
+            runManagementTask(buttons, status, "正在读取站序…", () -> services.lines().getStops(line.lineId()), found -> {
+                if (!line.equals(lineField.getClientProperty("selectedLine"))) {
+                    status.setText("线路已更改，请重新选择线路。");
+                    return;
+                }
+                stops.clear();
+                stops.addAll(found);
+                model.setRowCount(0);
+                for (LineStopView stop : stops) {
+                    StationView station = stop.station();
+                    model.addRow(new Object[]{stop.position(), station.stationId(), station.key().chineseName(),
+                            station.englishName(), station.key().districtName(), stop.attributes().status(),
+                            stop.attributes().openingYear()});
+                }
+                status.setText("共 " + stops.size() + " 站，按线路站序显示。");
+            });
+        };
+        lineField.addPropertyChangeListener("selectedLine", event -> {
+            stops.clear();
+            model.setRowCount(0);
+            if (event.getNewValue() != null && chooseLine.isEnabled()) {
+                refresh.run();
+            } else {
+                status.setText("请选择线路。");
+            }
+        });
+        chooseLine.addActionListener(event -> {
+            showSelector(lineField, "线路", "selectedLine", "", keyword -> {
+                if (keyword.isBlank()) return LineCatalog.listAll();
+                List<LineView> matches = new ArrayList<>(services.lines().search(keyword));
+                matches.sort(Comparator.comparingLong(LineView::lineId));
+                return matches;
+            }, line -> line.chineseName() + " / " + line.englishName() + "  (ID: " + line.lineId() + ")",
+                    line -> line.chineseName() + " / " + line.englishName() + "  (ID: " + line.lineId() + ")");
+        });
+
+        insert.addActionListener(event -> {
+            LineView line = (LineView) lineField.getClientProperty("selectedLine");
+            if (line == null) { status.setText("请先选择线路。"); return; }
+            JTextField stationField = textField(16);
+            stationField.setToolTipText("输入车站名称或 ID 并选择候选");
+            installSuggestions(stationField, "selectedStation",
+                    keyword -> findStationCandidates(services.stations(), keyword),
+                    MetroUiPreview::stationLabel,
+                    station -> station.key().chineseName() + " · " + station.key().districtName());
+            JButton selectStation = secondaryButton("选择车站");
+            selectStation.addActionListener(action -> showStationSelector(stationField, services.stations()));
+            JPanel stationChoice = new JPanel(new BorderLayout(8, 0));
+            stationChoice.add(stationField, BorderLayout.CENTER);
+            stationChoice.add(selectStation, BorderLayout.EAST);
+            JTextField position = textField(10);
+            position.setText(Integer.toString(stops.size() + 1));
+            JComboBox<String> state = new JComboBox<>(new String[]{"Operation", "Construction"});
+            JTextField year = textField(10);
+            JTextField start = textField(10);
+            JTextField end = textField(10);
+            JTextField latitude = textField(10);
+            JTextField longitude = textField(10);
+            JPanel form = new JPanel(new GridLayout(8, 2, 8, 8));
+            for (Object[] field : new Object[][]{{"车站", stationChoice}, {"插入站序（从 1 开始）", position},
+                    {"状态", state}, {"开通或预计开通年份", year}, {"首班时间 HH:mm（可空）", start},
+                    {"末班时间 HH:mm（可空）", end}, {"源纬度（可空）", latitude}, {"源经度（可空）", longitude}}) {
+                form.add(new JLabel((String) field[0]));
+                form.add((java.awt.Component) field[1]);
+            }
+            if (JOptionPane.showConfirmDialog(page, form, "向 " + line.chineseName() + " 插入车站",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) != JOptionPane.OK_OPTION) return;
+            StationView station = (StationView) stationField.getClientProperty("selectedStation");
+            if (station == null) { status.setText("请先选择车站。"); return; }
+            try {
+                int index = Integer.parseInt(position.getText().strip());
+                int openingYear = Integer.parseInt(year.getText().strip());
+                LocalTime startTime = start.getText().isBlank() ? null : LocalTime.parse(start.getText().strip());
+                LocalTime endTime = end.getText().isBlank() ? null : LocalTime.parse(end.getText().strip());
+                BigDecimal lat = latitude.getText().isBlank() ? null : new BigDecimal(latitude.getText().strip());
+                BigDecimal lon = longitude.getText().isBlank() ? null : new BigDecimal(longitude.getText().strip());
+                StopDraft draft = new StopDraft(station.stationId(), (String) state.getSelectedItem(), openingYear,
+                        startTime, endTime, lat, lon);
+                runManagementTask(buttons, status, "正在插入…", () -> {
+                    services.lines().insertStops(line.lineId(), index, List.of(draft));
+                    return null;
+                }, result -> {
+                    stops.clear();
+                    model.setRowCount(0);
+                    status.setText("插入成功，正在刷新站序。");
+                    SwingUtilities.invokeLater(refresh);
+                });
+            } catch (IllegalArgumentException | java.time.DateTimeException failure) {
+                JOptionPane.showMessageDialog(page, "请检查站序、年份、时间（HH:mm）和坐标格式。",
+                        "输入有误", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        remove.addActionListener(event -> {
+            LineView line = (LineView) lineField.getClientProperty("selectedLine");
+            int row = table.getSelectedRow();
+            if (line == null || row < 0) { status.setText("请先选择线路和要移除的站点。"); return; }
+            LineStopView selected = stops.get(table.convertRowIndexToModel(row));
+            StationView station = selected.station();
+            String prompt = "从 " + line.chineseName() + "（ID=" + line.lineId() + "）移除 "
+                    + station.key().chineseName() + " · " + station.key().districtName()
+                    + "（ID=" + station.stationId() + "）？\n车站本身不会被删除，后续站序会调整。";
+            if (JOptionPane.showConfirmDialog(page, prompt, "确认移除站线关系",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) return;
+            runManagementTask(buttons, status, "正在移除…", () -> {
+                services.lines().removeStop(line.lineId(), station.stationId());
+                return null;
+            }, result -> {
+                stops.clear();
+                model.setRowCount(0);
+                status.setText("移除成功，正在刷新站序。");
+                SwingUtilities.invokeLater(refresh);
+            });
+        });
+        neighbors.addActionListener(event -> {
+            LineView line = (LineView) lineField.getClientProperty("selectedLine");
+            int row = table.getSelectedRow();
+            if (line == null || row < 0) { status.setText("请先选择线路和车站。"); return; }
+            StationView station = stops.get(table.convertRowIndexToModel(row)).station();
+            showNeighborDialog(page, services, line, station);
+        });
         return page;
+    }
+
+    private static void showNeighborDialog(JPanel parent, AppServices services, LineView line, StationView station) {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "前后站查询",
+                java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        JPanel content = new JPanel(new BorderLayout(0, 18));
+        content.setBackground(Color.WHITE);
+        content.setBorder(BorderFactory.createEmptyBorder(24, 26, 24, 26));
+
+        JPanel heading = new JPanel(new GridLayout(2, 1, 0, 6));
+        heading.setOpaque(false);
+        JLabel title = new JLabel("查询前后站点");
+        title.setFont(title.getFont().deriveFont(Font.BOLD, 20f));
+        title.setForeground(TEXT);
+        JLabel subtitle = new JLabel(line.chineseName() + "  ·  " + station.key().chineseName()
+                + " / " + station.englishName());
+        subtitle.setForeground(MUTED);
+        heading.add(title);
+        heading.add(subtitle);
+        content.add(heading, BorderLayout.NORTH);
+
+        JPanel center = new JPanel(new BorderLayout(0, 12));
+        center.setOpaque(false);
+        JPanel inputRow = new JPanel(new BorderLayout(10, 0));
+        inputRow.setOpaque(false);
+        inputRow.add(new JLabel("相隔站数 n"), BorderLayout.WEST);
+        JTextField count = textField(8);
+        count.setText("1");
+        inputRow.add(count, BorderLayout.CENTER);
+        JButton query = primaryButton("查询");
+        inputRow.add(query, BorderLayout.EAST);
+        center.add(inputRow, BorderLayout.NORTH);
+
+        JTextArea result = new JTextArea("输入非负整数，0 表示当前站。\n查询结果将在这里显示。");
+        result.setEditable(false);
+        result.setLineWrap(true);
+        result.setWrapStyleWord(true);
+        result.setBackground(BACKGROUND);
+        result.setForeground(TEXT);
+        result.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
+        result.setBorder(BorderFactory.createEmptyBorder(14, 16, 14, 16));
+        JScrollPane resultScroll = new JScrollPane(result);
+        resultScroll.setBorder(null);
+        resultScroll.getViewport().setBackground(BACKGROUND);
+        center.add(resultScroll, BorderLayout.CENTER);
+        content.add(center, BorderLayout.CENTER);
+
+        JButton close = secondaryButton("关闭");
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        footer.setOpaque(false);
+        footer.add(close);
+        content.add(footer, BorderLayout.SOUTH);
+        close.addActionListener(event -> dialog.dispose());
+        query.addActionListener(event -> {
+            final int n;
+            try {
+                n = Integer.parseInt(count.getText().strip());
+                if (n < 0) throw new NumberFormatException();
+            } catch (NumberFormatException failure) {
+                result.setText("请输入有效的非负整数。");
+                return;
+            }
+            query.setEnabled(false);
+            count.setEditable(false);
+            result.setText("正在查询…");
+            new SwingWorker<String[], Void>() {
+                @Override
+                protected String[] doInBackground() {
+                    NeighborPair pair = services.neighbors().get(station.englishName(), line.englishName(), n);
+                    List<LineStopView> currentStops = services.lines().getStops(line.lineId());
+                    LineStopView current = currentStops.stream()
+                            .filter(stop -> stop.station().stationId() == station.stationId())
+                            .findFirst().orElse(null);
+                    return new String[]{formatNeighbor(pair.lowerPositionName(), currentStops, current, -(long) n),
+                            formatNeighbor(pair.higherPositionName(), currentStops, current, (long) n)};
+                }
+
+                @Override
+                protected void done() {
+                    if (!dialog.isDisplayable()) return;
+                    try {
+                        String[] names = get();
+                        result.setText("向前第 " + n + " 站\n" + names[0]
+                                + "\n\n向后第 " + n + " 站\n" + names[1]);
+                    } catch (InterruptedException failure) {
+                        Thread.currentThread().interrupt();
+                        result.setText("查询已中断，请重试。");
+                    } catch (ExecutionException failure) {
+                        Throwable cause = failure.getCause();
+                        result.setText(cause instanceof AppException ? cause.getMessage() : "查询失败，请检查数据库连接。");
+                    } finally {
+                        query.setEnabled(true);
+                        count.setEditable(true);
+                    }
+                }
+            }.execute();
+        });
+        count.addActionListener(event -> query.doClick());
+        dialog.setContentPane(content);
+        dialog.setMinimumSize(new Dimension(540, 430));
+        dialog.setSize(620, 480);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setVisible(true);
+    }
+
+    private static String formatNeighbor(String englishName, List<LineStopView> stops,
+                                         LineStopView current, long offset) {
+        if (englishName == null) return "无此站（超出线路范围）";
+        if (current != null) {
+            long targetPosition = (long) current.position() + offset;
+            for (LineStopView stop : stops) {
+                StationView station = stop.station();
+                if (stop.position() == targetPosition && englishName.equals(station.englishName())) {
+                    return station.key().chineseName() + " / " + station.englishName();
+                }
+            }
+        }
+        return englishName + "（站序可能已变化，请刷新后重试）";
     }
 
     private static JPanel withTabs(JPanel cards, String... names) {

@@ -5,7 +5,7 @@ import edu.cs307.metro.bootstrap.AppServices;
 import edu.cs307.metro.cli.CliApp;
 import edu.cs307.metro.common.AppException;
 import edu.cs307.metro.db.DatabaseStatus;
-import edu.cs307.metro.ui.DesktopApp;
+import edu.cs307.metro.ui.MetroUiPreview;
 import edu.cs307.metro.routing.RouteCacheGenerator;
 import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
@@ -57,7 +57,7 @@ public final class Main {
                         error.println("当前环境不支持图形界面，请使用 --cli。");
                         return 1;
                     }
-                    new DesktopApp(services).show();
+                    MetroUiPreview.show(services);
                 }
                 case "--check-db" -> {
                     DatabaseStatus status = services.database().check();

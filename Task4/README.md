@@ -58,7 +58,7 @@ CLI 多候选时输入列表中的 ID，留空取消本次操作。未查到线�
 2. Maven home 选择 IDEA 的 **Bundled (Maven 3)**；项目语言级别与编译目标为 17。
 3. Maven 同步完成后运行 `edu.cs307.metro.Main`；无需数据库配置即可查看开发菜单。
 4. 要连接数据库，在该运行配置的 Environment variables 设置 `DB_URL`、`DB_USER`、`DB_PASSWORD`，参考 `config/db.env.example`。这三个变量都需要配置；程序不默认选择某位成员的数据库。模板文件不会自动加载。
-5. 程序参数填 `--check-db` 检查当前数据库和 schema，或填 `--gui` 打开窗口。
+5. 程序参数填 `--check-db` 检查当前数据库和 schema，或填 `--gui` 打开蓝色地铁管理界面。留空或填 `--cli` 使用命令行菜单。
 
 团队基线是 Java 17。可用较新 JDK 按 `--release 17` 编译，但这不替代最终在 Java 17 运行时上的验证。
 
