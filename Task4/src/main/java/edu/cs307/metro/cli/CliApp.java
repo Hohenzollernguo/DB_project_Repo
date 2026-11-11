@@ -32,8 +32,8 @@ public final class CliApp {
                     3. 站线关系（插入/移除）
                     4. 前后第 n 站
                     5. 两站路径
-                    6. 两地标路线（待实现）
-                    7. 票价（规则待配置）
+                    6. 两地标路线
+                    7. 查询票价
                     8. 检查数据库连接
                     9. 添加线路
                     10. 删除线路
@@ -51,8 +51,7 @@ public final class CliApp {
                         if (!runStationMenu(input, output)) return;
                     }
                     case "4" -> runNeighborQuery(input, output);
-                    case "6" ->
-                            output.println("此功能的接口和入口已预留，业务与输入流程尚未实现。");
+                    case "6" -> runLandmarkRouteQuery(input, output);
                     case "5" -> runRouteQuery(input, output);
                     case "2" -> {
                         LineView selected = CliLineSelection.select(services.lines(), input, output, "修改");
@@ -71,7 +70,7 @@ public final class CliApp {
                     case "3" -> {
                         if (!runLineStationMenu(input, output)) return;
                     }
-                    case "7" -> output.println("计费规则与基础数据待确认，当前无法计算票价。");
+                    case "7" -> runFareQuery(input, output);
                     case "8" -> {
                         DatabaseStatus status = services.database().check();
                         output.printf("已连接：数据库=%s，schema=%s，PostgreSQL=%s%n",
@@ -150,6 +149,62 @@ public final class CliApp {
                 result.lowerPositionName() == null ? "无此站（超出线路范围）" : result.lowerPositionName());
         output.printf("向后第 %d 站（站序增大）：%s%n", n,
                 result.higherPositionName() == null ? "无此站（超出线路范围）" : result.higherPositionName());
+    }
+
+    private void runLandmarkRouteQuery(Scanner input, PrintStream output) {
+        output.print("请输入起点地标全名：");
+        if (!input.hasNextLine()) {
+            return;
+        }
+        String fromName = input.nextLine();
+
+        output.print("请输入终点地标全名：");
+        if (!input.hasNextLine()) {
+            return;
+        }
+        String toName = input.nextLine();
+
+        LandmarkRoute result = services.landmarks().findRoute(fromName, toName);
+
+        LandmarkHit from = result.from();
+        LandmarkHit to = result.to();
+        RouteResult route = result.route();
+
+        output.printf("起点：%s，%s站 %s口%n",
+                from.landmarkName(), from.station().key().chineseName(), from.exitCode());
+
+        for (RouteLeg leg : route.legs()) {
+            output.printf("乘坐 %s：", leg.line().chineseName());
+            for (StationView station : leg.stations()) {
+                output.print(station.key().chineseName() + " ");
+            }
+            output.println();
+        }
+
+        output.printf("终点：%s，%s站 %s口%n",
+                to.landmarkName(), to.station().key().chineseName(), to.exitCode());
+        output.printf("共 %d 个站间段，换乘 %d 次。%n",
+                route.stopCount(), route.transferCount());
+    }
+
+    private void runFareQuery(Scanner input, PrintStream output) {
+        StationView from = selectStation(input, output, "作为票价起点");
+        if (from == null) {
+            return;
+        }
+
+        StationView to = selectStation(input, output, "作为票价终点");
+        if (to == null) {
+            return;
+        }
+
+        FareQuote quote = services.fares().quote(from.stationId(), to.stationId());
+
+        output.printf("从 %s 到 %s%n",
+                from.key().chineseName(),
+                to.key().chineseName());
+        output.printf("项目票价：%s 元%n", quote.amount());
+        output.println(quote.message());
     }
 
     private void runRouteQuery(Scanner input, PrintStream output) {

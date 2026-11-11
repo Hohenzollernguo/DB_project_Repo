@@ -24,7 +24,7 @@ public final class AppBootstrap {
                 new JdbcNeighborService(transactions),
                 routes,
                 new DefaultLandmarkService(transactions, routes),
-                new UnconfiguredFareService(),
+                new StationFareService(routes),
                 new DatabaseDiagnostics(transactions, new DatabaseInfoDao()));
     }
 }

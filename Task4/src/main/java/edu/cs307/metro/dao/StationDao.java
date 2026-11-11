@@ -15,7 +15,7 @@ import java.util.OptionalLong;
 
 public final class StationDao {
 
-    private static final String STATION_SELECT_SQL = """
+     static final String STATION_SELECT_SQL = """
             select s.station_id, s.chinese_name, s.english_name, d.name_en as district_name,
                 case
                     when exists (
@@ -142,7 +142,7 @@ public final class StationDao {
         }
     }
 
-    private StationView readStation(ResultSet rows) throws SQLException {
+    static StationView readStation(ResultSet rows) throws SQLException {
         long stationId = rows.getLong("station_id");
         String chineseName = rows.getString("chinese_name");
         String englishName = rows.getString("english_name");
