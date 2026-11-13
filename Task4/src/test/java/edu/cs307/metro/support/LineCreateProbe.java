@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,6 +22,41 @@ public final class LineCreateProbe {
     public SQLException executionFailure;
     public SQLException commitFailure;
     public Runnable beforeExecute = () -> {};
+    public List<String> existingEnglishNames = List.of();
+
+    private Statement numberStatement() {
+        return (Statement) Proxy.newProxyInstance(Statement.class.getClassLoader(),
+                new Class<?>[]{Statement.class}, (proxy, method, args) -> switch (method.getName()) {
+                    case "execute" -> {
+                        if (!"LOCK TABLE public.metro_line IN SHARE ROW EXCLUSIVE MODE".equals(args[0])) {
+                            throw new AssertionError(args[0]);
+                        }
+                        events.add("lockNumbers");
+                        yield false;
+                    }
+                    case "executeQuery" -> {
+                        if (!"SELECT english_name FROM public.metro_line".equals(args[0])) {
+                            throw new AssertionError(args[0]);
+                        }
+                        events.add("readNumbers");
+                        var names = existingEnglishNames.iterator();
+                        String[] current = {null};
+                        yield Proxy.newProxyInstance(ResultSet.class.getClassLoader(),
+                                new Class<?>[]{ResultSet.class}, (result, call, parameters) -> switch (call.getName()) {
+                                    case "next" -> {
+                                        boolean found = names.hasNext();
+                                        if (found) current[0] = names.next();
+                                        yield found;
+                                    }
+                                    case "getString" -> current[0];
+                                    case "close" -> null;
+                                    default -> throw new AssertionError(call.getName());
+                                });
+                    }
+                    case "close" -> null;
+                    default -> throw new AssertionError(method.getName());
+                });
+    }
 
     private final ResultSet rows = (ResultSet) Proxy.newProxyInstance(
             ResultSet.class.getClassLoader(), new Class<?>[]{ResultSet.class},
@@ -59,6 +95,7 @@ public final class LineCreateProbe {
     private final Connection connection = (Connection) Proxy.newProxyInstance(
             Connection.class.getClassLoader(), new Class<?>[]{Connection.class},
             (proxy, method, args) -> switch (method.getName()) {
+                case "createStatement" -> numberStatement();
                 case "prepareStatement" -> {
                     sql = (String) args[0];
                     events.add("prepare");

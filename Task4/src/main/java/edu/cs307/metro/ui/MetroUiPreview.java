@@ -8,8 +8,8 @@ import edu.cs307.metro.model.StationView;
 import edu.cs307.metro.model.StationDraft;
 import edu.cs307.metro.model.LineDraft;
 import edu.cs307.metro.model.LineView;
+import edu.cs307.metro.model.LineNumber;
 import edu.cs307.metro.model.LineStopView;
-import edu.cs307.metro.model.StopDraft;
 import edu.cs307.metro.model.NeighborPair;
 import edu.cs307.metro.model.FareQuote;
 import edu.cs307.metro.model.LandmarkHit;
@@ -36,8 +36,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
@@ -687,10 +685,17 @@ public final class MetroUiPreview {
     }
 
     private static JPanel managementPage(AppServices services, boolean stationPage) {
+        return managementPage(services, stationPage,
+                (parent, selected) -> managementDraft(parent, stationPage, selected));
+    }
+
+    // 表单输入与提交分开，允许自动测试直接验证实际管理页面的新增和查询流程。
+    static JPanel managementPage(AppServices services, boolean stationPage,
+                                 java.util.function.BiFunction<JPanel, Object, Object> draftProvider) {
         String title = stationPage ? "车站管理" : "线路管理";
         String searchHint = stationPage ? "车站中英文名（留空查询全部）" : "线路编号（留空查询全部）";
         String[] columns = stationPage ? new String[]{"ID", "中文名", "英文名", "行政区", "状态"}
-                : new String[]{"ID", "中文名", "英文名"};
+                : new String[]{"ID", "编号", "中文名", "英文名"};
         String createLabel = stationPage ? "新增车站" : "新增线路";
         JPanel page = page(title);
         JPanel content = new RoundedPanel(Color.WHITE, 24);
@@ -700,10 +705,12 @@ public final class MetroUiPreview {
         JPanel search = new JPanel(new BorderLayout(10, 0));
         search.setOpaque(false);
         JTextField keyword = textField(20);
+        keyword.setName(stationPage ? "stationKeyword" : "lineKeyword");
         keyword.setToolTipText(searchHint);
         search.add(new JLabel(searchHint), BorderLayout.WEST);
         search.add(keyword, BorderLayout.CENTER);
         JButton searchButton = primaryButton("查询");
+        searchButton.setName("managementSearch");
         search.add(searchButton, BorderLayout.EAST);
         content.add(search, BorderLayout.NORTH);
 
@@ -714,6 +721,7 @@ public final class MetroUiPreview {
             }
         };
         JTable table = new JTable(model);
+        table.setName("managementResults");
         table.setRowHeight(32);
         table.setSelectionBackground(new Color(220, 234, 255));
         table.setSelectionForeground(TEXT);
@@ -730,12 +738,14 @@ public final class MetroUiPreview {
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         actions.setOpaque(false);
         JButton createButton = primaryButton(createLabel);
+        createButton.setName("managementCreate");
         JButton updateButton = secondaryButton("修改所选");
         JButton deleteButton = secondaryButton("删除所选");
         actions.add(createButton);
         actions.add(updateButton);
         actions.add(deleteButton);
         JLabel status = new JLabel("请输入查询条件，或新增记录。");
+        status.setName("managementStatus");
         status.setForeground(MUTED);
         actions.add(status);
         content.add(actions, BorderLayout.SOUTH);
@@ -764,16 +774,19 @@ public final class MetroUiPreview {
         keyword.addActionListener(event -> searchAction.run());
 
         createButton.addActionListener(event -> {
-            Object draft = managementDraft(page, stationPage, null);
+            Object draft = draftProvider.apply(page, null);
             if (draft == null) return;
             runManagementTask(buttons, status, "正在新增…", () -> stationPage
                     ? services.stations().create((StationDraft) draft)
-                    : services.lines().create((LineDraft) draft), created -> {
+                    : services.lines().createNumbered((LineDraft) draft), created -> {
                 results.clear();
                 results.add(created);
                 model.setRowCount(0);
                 addManagementRow(model, created);
-                status.setText("新增成功。");
+                status.setText(created instanceof LineView line
+                        ? "新增成功：编号=" + line.number() + "，ID=" + line.lineId()
+                            + "。可在站线管理中输入编号查询。"
+                        : "新增成功。");
             });
         });
 
@@ -784,7 +797,7 @@ public final class MetroUiPreview {
                 return;
             }
             Object selected = results.get(table.convertRowIndexToModel(row));
-            Object draft = managementDraft(page, stationPage, selected);
+            Object draft = draftProvider.apply(page, selected);
             if (draft == null) return;
             runManagementTask(buttons, status, "正在修改…", () -> stationPage
                     ? services.stations().update(((StationView) selected).stationId(), (StationDraft) draft)
@@ -840,11 +853,17 @@ public final class MetroUiPreview {
             chinese.setText(line.chineseName());
             english.setText(line.englishName());
         }
-        JPanel form = new JPanel(new GridLayout(stationPage ? 3 : 2, 2, 10, 10));
+        JPanel form = new JPanel(new GridLayout(3, 2, 10, 10));
+        if (!stationPage) {
+            form.add(new JLabel("线路编号"));
+            form.add(new JLabel(line == null ? "自动取当前最大编号 + 1"
+                    : line.number().isEmpty() ? "无编号" : line.number()));
+        }
         form.add(new JLabel("中文名"));
         form.add(chinese);
         form.add(new JLabel("英文名"));
         form.add(english);
+        if (!stationPage) english.setToolTipText("保存时自动添加或保留 Line N 编号前缀。");
         if (stationPage) {
             form.add(new JLabel("行政区英文名"));
             form.add(district);
@@ -853,7 +872,11 @@ public final class MetroUiPreview {
         if (JOptionPane.showConfirmDialog(parent, form, title, JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE) != JOptionPane.OK_OPTION) return null;
         if (stationPage) return new StationDraft(chinese.getText(), english.getText(), district.getText());
-        return new LineDraft(chinese.getText(), english.getText());
+        String englishName = english.getText();
+        if (line != null && !line.number().isEmpty() && !englishName.isBlank()) {
+            englishName = LineNumber.apply(line.number(), englishName.strip());
+        }
+        return new LineDraft(chinese.getText(), englishName);
     }
 
     private static void addManagementRow(DefaultTableModel model, Object item) {
@@ -865,7 +888,8 @@ public final class MetroUiPreview {
             model.insertRow(index, new Object[]{station.stationId(), station.key().chineseName(),
                     station.englishName(), station.key().districtName(), station.state()});
         } else if (item instanceof LineView line) {
-            model.insertRow(index, new Object[]{line.lineId(), line.chineseName(), line.englishName()});
+            model.insertRow(index, new Object[]{line.lineId(),
+                    line.number().isEmpty() ? "—" : line.number(), line.chineseName(), line.englishName()});
         }
     }
 
@@ -912,8 +936,10 @@ public final class MetroUiPreview {
             List<LineView> matches = new ArrayList<>(services.lines().search(keyword));
             matches.sort(Comparator.comparingLong(LineView::lineId));
             return matches;
-        }, line -> line.chineseName() + " / " + line.englishName() + "  (ID: " + line.lineId() + ")",
-                line -> line.chineseName() + " / " + line.englishName() + "  (ID: " + line.lineId() + ")");
+        }, line -> "编号 " + line.number() + " · " + line.chineseName() + " / " + line.englishName()
+                        + "  (ID: " + line.lineId() + ")",
+                line -> "编号 " + line.number() + " · " + line.chineseName() + " / " + line.englishName()
+                        + "  (ID: " + line.lineId() + ")");
         JButton chooseLine = secondaryButton("选择线路");
         JPanel top = new JPanel(new BorderLayout(10, 0));
         top.setOpaque(false);
@@ -1019,47 +1045,19 @@ public final class MetroUiPreview {
             JPanel stationChoice = new JPanel(new BorderLayout(8, 0));
             stationChoice.add(stationField, BorderLayout.CENTER);
             stationChoice.add(selectStation, BorderLayout.EAST);
-            JTextField position = textField(10);
-            position.setText(Integer.toString(stops.size() + 1));
-            JComboBox<String> state = new JComboBox<>(new String[]{"Operation", "Construction"});
-            JTextField year = textField(10);
-            JTextField start = textField(10);
-            JTextField end = textField(10);
-            JTextField latitude = textField(10);
-            JTextField longitude = textField(10);
-            JPanel form = new JPanel(new GridLayout(8, 2, 8, 8));
-            for (Object[] field : new Object[][]{{"车站", stationChoice}, {"插入站序（从 1 开始）", position},
-                    {"状态", state}, {"开通或预计开通年份", year}, {"首班时间 HH:mm（可空）", start},
-                    {"末班时间 HH:mm（可空）", end}, {"源纬度（可空）", latitude}, {"源经度（可空）", longitude}}) {
-                form.add(new JLabel((String) field[0]));
-                form.add((java.awt.Component) field[1]);
-            }
-            if (JOptionPane.showConfirmDialog(page, form, "向 " + line.chineseName() + " 插入车站",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) != JOptionPane.OK_OPTION) return;
-            StationView station = (StationView) stationField.getClientProperty("selectedStation");
-            if (station == null) { status.setText("请先选择车站。"); return; }
-            try {
-                int index = Integer.parseInt(position.getText().strip());
-                int openingYear = Integer.parseInt(year.getText().strip());
-                LocalTime startTime = start.getText().isBlank() ? null : LocalTime.parse(start.getText().strip());
-                LocalTime endTime = end.getText().isBlank() ? null : LocalTime.parse(end.getText().strip());
-                BigDecimal lat = latitude.getText().isBlank() ? null : new BigDecimal(latitude.getText().strip());
-                BigDecimal lon = longitude.getText().isBlank() ? null : new BigDecimal(longitude.getText().strip());
-                StopDraft draft = new StopDraft(station.stationId(), (String) state.getSelectedItem(), openingYear,
-                        startTime, endTime, lat, lon);
-                runManagementTask(buttons, status, "正在插入…", () -> {
-                    services.lines().insertStops(line.lineId(), index, List.of(draft));
-                    return null;
-                }, result -> {
-                    stops.clear();
-                    model.setRowCount(0);
-                    status.setText("插入成功，正在刷新站序。");
-                    SwingUtilities.invokeLater(refresh);
-                });
-            } catch (IllegalArgumentException | java.time.DateTimeException failure) {
-                JOptionPane.showMessageDialog(page, "请检查站序、年份、时间（HH:mm）和坐标格式。",
-                        "输入有误", JOptionPane.ERROR_MESSAGE);
-            }
+            StopInsertPanel form = new StopInsertPanel(stationField, stationChoice,
+                    stops.size() + 1, services.lines());
+            StopInsertPanel.Insertion request = form.showDialog(page, "向 " + line.chineseName() + " 插入车站");
+            if (request == null) return;
+            runManagementTask(buttons, status, "正在插入…", () -> {
+                services.lines().insertStops(line.lineId(), request.position(), List.of(request.stop()));
+                return null;
+            }, result -> {
+                stops.clear();
+                model.setRowCount(0);
+                status.setText("插入成功，正在刷新站序。");
+                SwingUtilities.invokeLater(refresh);
+            });
         });
         remove.addActionListener(event -> {
             LineView line = (LineView) lineField.getClientProperty("selectedLine");

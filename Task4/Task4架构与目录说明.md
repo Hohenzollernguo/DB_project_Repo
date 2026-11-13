@@ -2,6 +2,10 @@
 
 日期：2026-11-02。用途：供 A、B 继续开发的共享架构基线。
 
+2026-11-13 补充 `LineService.getStopSources(stationId)` 和 `StopSource(LineView, StopDraft)`，供 GUI 插入车站时读取并复用已有站线资料；七表结构、导入脚本和既有 DTO 构造参数不变。详见 [插入车站复用已有资料](docs/插入车站复用已有资料.md)，作为原 JDBC 开发约定的增补。
+
+2026-11-13 补充 GUI 自动编号接口 `LineService.createNumbered(LineDraft)`，编号仍遵循英文名 `Line N` 的既有识别规则；DTO 构造参数、七表结构与导入流程兼容。接口语义、事务与调用方变更见 [GUI 线路自动编号](docs/GUI线路自动编号.md)，作为原 JDBC 开发约定的增补。
+
 2026-11-09 更新了线路修改和删除的交互。用户输入线路编号，程序查询全部候选，单条自动选定，多条列出 ID 和名称供选择，再以选中记录的内部 ID 调用 Service。CLI 与 Swing 使用相同的选择规则。
 
 2026-11-07 已接通线路添加、修改和删除的 DAO、Service、CLI 与 Swing。当前入口和验收结果见 [线路添加删除验收](docs/线路添加删除验收.md)。
@@ -149,7 +153,7 @@ DTO 使用 Java record，例如 `line.lineId()`、`input.chineseName()`。A、B 
 团队约定中的六个接口：
 
 - `StationService`：create、update、delete、search。
-- `LineService`：create、update、delete、search、getStops、insertStops、removeStop。
+- `LineService`：create、createNumbered、update、delete、search、getStops、getStopSources、insertStops、removeStop。
 - `NeighborService`：get。
 - `RouteService`：findRoute、findBestRoute。
 - `LandmarkService`：searchPrefix、findRoute。
@@ -219,6 +223,7 @@ SQLSTATE 映射：23505 → DUPLICATE；23503 在删除时 → IN_USE，在写�
 - 有站线关系的线路不能直接删除；从线路移除站点不删除 station、出口或其他线路的关联。
 - 插入位置 p 的范围为 1..N+1；空线只接受 1；批量列表非空、无重复，每站存在且尚未属于该线。
 - 每个 StopDraft 必须提供合法 status、openingYear；时间、坐标可空。openingYear 还必须适合数据库 SMALLINT。
+- GUI 选中已有车站时，通过 getStopSources 自动填入一条完整已有站线资料；来源线路可切换，缺少资料时才需补填。不同线路的属性不能混合成一条来源，自动填入的值允许按目标线路调整。
 - 同一事务先锁 metro_line 行，再移动站序并插入/删除；多线时按 line_id 升序锁定。
 - position 必须在提交前连续为 1..N。现有延迟 UNIQUE 只保证不重复，不自动保证连续。
 - 提交阶段也可能发生唯一冲突，因此提交失败必须回滚。基础设施已有相应自动测试。

@@ -38,13 +38,27 @@ public final class JdbcLineService implements LineService {
 
     @Override
     public LineView create(LineDraft input) {
+        LineDraft normalized = normalizeDraft(input);
+        return transactions.write(connection -> lineDao.insert(connection, normalized));
+    }
+
+    @Override
+    public LineView createNumbered(LineDraft input) {
+        LineDraft normalized = normalizeDraft(input);
+        return transactions.write(connection -> {
+            String number = lineDao.nextNumber(connection);
+            return lineDao.insert(connection, new LineDraft(normalized.chineseName(),
+                    LineNumber.apply(number, normalized.englishName())));
+        });
+    }
+
+    private static LineDraft normalizeDraft(LineDraft input) {
         if (input == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "请提供线路的中英文名。");
         }
-        LineDraft normalized = new LineDraft(
+        return new LineDraft(
                 normalizeName(input.chineseName(), "中文名"),
                 normalizeName(input.englishName(), "英文名"));
-        return transactions.write(connection -> lineDao.insert(connection, normalized));
     }
 
     @Override
@@ -115,6 +129,14 @@ public final class JdbcLineService implements LineService {
             }
             return lineStationDao.findByLine(connection, lineId);
         });
+    }
+
+    @Override
+    public List<StopSource> getStopSources(long stationId) {
+        if (stationId <= 0) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "车站 ID 必须是正整数。");
+        }
+        return transactions.readSnapshot(connection -> lineStationDao.findSourcesByStation(connection, stationId));
     }
 
     @Override

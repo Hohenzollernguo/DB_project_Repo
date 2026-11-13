@@ -46,7 +46,7 @@ class LineCreatePanelTest {
     }
 
     @Test
-    void addingRunsOffEdtDisablesSubmissionAndShowsAssignedId() throws Exception {
+    void addingRunsOffEdtDisablesSubmissionAndShowsAssignedNumberAndId() throws Exception {
         LineCreateProbe probe = new LineCreateProbe();
         CountDownLatch enteredSql = new CountDownLatch(1);
         CountDownLatch releaseSql = new CountDownLatch(1);
@@ -75,8 +75,8 @@ class LineCreatePanelTest {
         }
         assertTrue(completed.await(5, TimeUnit.SECONDS));
         SwingUtilities.invokeAndWait(() -> {
-            assertTrue(component(panel, "status", JLabel.class).getText().contains("添加成功：ID=42"));
-            assertTrue(component(panel, "status", JLabel.class).getText().contains("新线路 / New Line"));
+            assertTrue(component(panel, "status", JLabel.class).getText().contains("添加成功：编号=1，ID=42"));
+            assertTrue(component(panel, "status", JLabel.class).getText().contains("新线路 / Line 1 New Line"));
             assertEquals("", component(panel, "chineseName", JTextField.class).getText());
             assertEquals("", component(panel, "englishName", JTextField.class).getText());
             assertTrue(component(panel, "englishName", JTextField.class).isEnabled());

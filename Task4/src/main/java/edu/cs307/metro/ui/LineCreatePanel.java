@@ -15,7 +15,7 @@ public final class LineCreatePanel extends JPanel {
     private final JTextField chineseName = new JTextField(24);
     private final JTextField englishName = new JTextField(24);
     private final JButton create = new JButton("添加线路");
-    private final JLabel status = new JLabel("请输入新线路的中英文名。");
+    private final JLabel status = new JLabel("请输入中英文名；编号自动取当前最大编号加 1，英文名自动加 Line N 前缀。");
 
     public LineCreatePanel(LineService lines) {
         super(new BorderLayout(12, 12));
@@ -49,7 +49,7 @@ public final class LineCreatePanel extends JPanel {
         new SwingWorker<LineView, Void>() {
             @Override
             protected LineView doInBackground() {
-                return lines.create(input);
+                return lines.createNumbered(input);
             }
 
             @Override
@@ -58,7 +58,7 @@ public final class LineCreatePanel extends JPanel {
                     LineView result = get();
                     chineseName.setText("");
                     englishName.setText("");
-                    status.setText("添加成功：ID=" + result.lineId() + "，"
+                    status.setText("添加成功：编号=" + result.number() + "，ID=" + result.lineId() + "，"
                             + result.chineseName() + " / " + result.englishName());
                 } catch (InterruptedException failure) {
                     Thread.currentThread().interrupt();

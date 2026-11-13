@@ -6,6 +6,8 @@ import java.util.List;
 /** 成功返回 DTO，业务失败抛 AppException；查询列表无匹配时返回空列表。 */
 public interface LineService {
     LineView create(LineDraft input);
+    /** GUI 新增：分配当前最大线路编号加一（无编号线路时为 1），写入英文名的 Line N 前缀。 */
+    LineView createNumbered(LineDraft input);
     /** lineId 为交互层按线路编号查询并选定的记录的内部 ID。 */
     LineView update(long lineId, LineDraft input);
     /** lineId 为交互层按线路编号查询并选定的记录的内部 ID。 */
@@ -20,6 +22,8 @@ public interface LineService {
     List<LineView> search(String keyword);
     /** 按站序返回全部站点及站线属性；空线返回空列表，线路不存在返回 NOT_FOUND。 */
     List<LineStopView> getStops(long lineId);
+    /** GUI 插入已有车站时读取资料来源；运营线路优先，其次开通年份、内部线路 ID。无来源返回空列表。 */
+    List<StopSource> getStopSources(long stationId);
     void insertStops(long lineId, int position, List<StopDraft> stops);
     void updateStop(long lineId, StopDraft stop);
     void removeStop(long lineId, long stationId);

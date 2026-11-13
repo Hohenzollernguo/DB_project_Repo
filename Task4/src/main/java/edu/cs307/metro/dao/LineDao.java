@@ -2,7 +2,9 @@ package edu.cs307.metro.dao;
 
 import edu.cs307.metro.model.LineDraft;
 import edu.cs307.metro.model.LineView;
+import edu.cs307.metro.model.LineNumber;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LineDao {
+    /** 调用方必须开启事务；锁覆盖读取最大编号到插入提交，阻止并发写入抢占编号。 */
+    public String nextNumber(Connection connection) throws SQLException {
+        try (var statement = connection.createStatement()) {
+            statement.execute("LOCK TABLE public.metro_line IN SHARE ROW EXCLUSIVE MODE");
+            BigInteger maximum = BigInteger.ZERO;
+            try (ResultSet rows = statement.executeQuery("SELECT english_name FROM public.metro_line")) {
+                while (rows.next()) {
+                    String number = LineNumber.of(rows.getString("english_name"));
+                    if (!number.isEmpty()) maximum = maximum.max(new BigInteger(number));
+                }
+            }
+            return maximum.add(BigInteger.ONE).toString();
+        }
+    }
+
     public boolean exists(Connection connection, long lineId) throws SQLException {
         String sql = "SELECT 1 FROM public.metro_line WHERE line_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
